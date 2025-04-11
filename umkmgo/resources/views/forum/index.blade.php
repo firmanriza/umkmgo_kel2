@@ -2,7 +2,10 @@
 
 @section('content')
 <h2 class="mb-4">Diskusi UMKM</h2>
-<a href="{{ route('forum.create') }}" class="btn btn-orange mb-3">+ Tambah Diskusi</a>
+
+<a href="{{ route('forum.create') }}">
+    <button class="custom-button mb-4">Tambah Diskusi</button>
+</a>
 
 @foreach ($forums as $forum)
     <div class="card mb-3">

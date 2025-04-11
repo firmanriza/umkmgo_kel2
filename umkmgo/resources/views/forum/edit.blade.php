@@ -12,7 +12,7 @@
             </ul>
         </div>
     @endif
-    
+
     <form action="{{ route('forum.update', $forum->id) }}" method="POST">
         @csrf
         @method('PUT')
@@ -24,7 +24,7 @@
             <label for="content" class="form-label">Isi Diskusi</label>
             <textarea class="form-control" name="content" id="content" rows="5" required>{{ $forum->content }}</textarea>
         </div>
-        <button type="submit" class="btn btn-orange">Update</button>
+        <button type="submit" class="custom-button mt-4">Update</button>
         <a href="{{ route('forum.index') }}" class="btn btn-secondary">Batal</a>
     </form>
 @endsection

@@ -23,7 +23,7 @@
             <label for="content" class="form-label">Isi Diskusi</label>
             <textarea class="form-control" name="content" id="content" rows="5" required></textarea>
         </div>
-        <button type="submit" class="btn btn-orange">Kirim</button>
+        <button type="submit" class="custom-button mt-4">Kirim</button>
         <a href="{{ route('forum.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 @endsection
