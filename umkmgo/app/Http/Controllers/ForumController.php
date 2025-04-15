@@ -37,32 +37,47 @@ class ForumController extends Controller
 
     public function show(Forum $forum)
     {
+        $forum->load(['comments.user']); // untuk komentar
         return view('forum.show', compact('forum'));
     }
 
     public function edit(Forum $forum)
     {
-        $this->authorize('update', $forum);
+        // hanya pemilik forum yang bisa edit
+        if ($forum->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         return view('forum.edit', compact('forum'));
     }
 
     public function update(Request $request, Forum $forum)
     {
+        if ($forum->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $request->validate([
             'title' => 'required',
             'content' => 'required',
         ]);
 
-        $forum->update($request->only('title', 'content'));
+        $forum->update([
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
 
-        return redirect()->route('forum.index')->with('success', 'Diskusi diperbarui');
+        return redirect()->route('forum.index')->with('success', 'Diskusi berhasil diperbarui');
     }
 
     public function destroy(Forum $forum)
     {
-        $this->authorize('delete', $forum);
+        if ($forum->user_id !== Auth::id()) {
+            abort(403);
+        }
+
         $forum->delete();
 
-        return redirect()->route('forum.index')->with('success', 'Diskusi dihapus');
+        return redirect()->route('forum.index')->with('success', 'Diskusi berhasil dihapus');
     }
 }

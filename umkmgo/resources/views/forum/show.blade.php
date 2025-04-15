@@ -1,25 +1,55 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>{{ $forum->title }}</h1>
-    <p>{!! nl2br(e($forum->content)) !!}</p>
-
-    <small class="text-muted">Oleh: {{ $forum->user->name }} | {{ $forum->created_at->diffForHumans() }}</small>
-
-    <div class="mt-3">
-        @can('update', $forum)
-            <a href="{{ route('forum.edit', $forum->id) }}" class="btn btn-sm btn-warning">Edit</a>
-        @endcan
-
-        @can('delete', $forum)
-            <form action="{{ route('forum.destroy', $forum->id) }}" method="POST" class="d-inline"
-                  onsubmit="return confirm('Yakin ingin menghapus diskusi ini?')">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-sm btn-danger">Hapus</button>
-            </form>
-        @endcan
-
-        <a href="{{ route('forum.index') }}" class="btn btn-sm btn-secondary">Kembali</a>
+<div class="container mt-4">
+    <!-- Forum Post -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title">{{ $forum->title }}</h2>
+            <p class="card-text">{{ $forum->content }}</p>
+            <p class="text-muted mb-0">
+                <small>Diposting oleh <strong>{{ $forum->user->name }}</strong> pada {{ $forum->created_at->format('d M Y H:i') }}</small>
+            </p>
+        </div>
     </div>
+
+    <!-- Komentar -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5>Komentar</h5>
+        </div>
+        <div class="card-body">
+            @if ($forum->comments->count() > 0)
+                @foreach ($forum->comments as $comment)
+                    <div class="mb-3 border-bottom pb-2">
+                        <p class="mb-1"><strong>{{ $comment->user->name }}</strong> mengatakan:</p>
+                        <p class="mb-0">{{ $comment->content }}</p>
+                        <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                    </div>
+                @endforeach
+            @else
+                <p class="text-muted">Belum ada komentar.</p>
+            @endif
+        </div>
+    </div>
+
+    <!-- Form Komentar -->
+    <div class="card">
+        <div class="card-header">
+            <h5>Tulis Komentar</h5>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('comments.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="forum_id" value="{{ $forum->id }}">
+
+                <div class="form-group mb-3">
+                    <textarea name="content" class="form-control" rows="3" placeholder="Tulis komentarmu..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Kirim Komentar</button>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
