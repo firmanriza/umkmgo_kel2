@@ -106,8 +106,8 @@ class QuizController extends Controller
     }
     public function kategori()
     {
-        $kategoris = KategoriUmkm::with('quizzes')->get();
-        return view('quiz.main', compact('kategoris'));
+        $kategoris = KategoriUmkm::all();
+        return view('quiz.kategori', compact('kategoris'));
     }
 
     public function index($id)
@@ -124,15 +124,25 @@ class QuizController extends Controller
 
     public function show($id)
     {
-        $quiz = Quiz::findOrFail($id);
-        return view('quiz.show', compact('quiz'));
+    $quiz = Quiz::with('soals')->findOrFail($id);
+
+    // Kelompokkan soal berdasarkan bidang: Marketing, Produksi, Service
+    $soalsGrouped = $quiz->soals->groupBy('bidang');
+
+    return view('quiz.show', compact('quiz', 'soalsGrouped'));
     }
+
 
     public function attempt($id)
     {
-        $quiz = Quiz::with('soals')->findOrFail($id);
-        return view('quiz.attempt', compact('quiz'));
+    $quiz = Quiz::with('soals')->findOrFail($id);
+
+    // Kelompokkan soal berdasarkan bidang (Marketing, Produksi, Service)
+    $soalsGrouped = $quiz->soals->groupBy('bidang');
+
+    return view('quiz.attempt', compact('quiz', 'soalsGrouped'));
     }
+
 
     public function result(Request $request)
     {
@@ -155,16 +165,48 @@ class QuizController extends Controller
         $jawaban = $request->input('jawaban', []);
         $quiz = Quiz::with('soals')->findOrFail($id);
 
-        $score = 0;
-        $total = $quiz->soals->count();
+        $bidangScores = [
+        'Marketing' => ['benar' => 0, 'total' => 0],
+        'Produksi' => ['benar' => 0, 'total' => 0],
+        'Service' => ['benar' => 0, 'total' => 0],
+];
 
         foreach ($quiz->soals as $soal) {
-            if (isset($jawaban[$soal->id]) && $jawaban[$soal->id] === $soal->jawaban_benar) {
-                $score++;
-            }
+            $bidang = $soal->bidang;
+
+        if (isset($jawaban[$soal->id])) {
+            $bidangScores[$bidang]['total']++;
+
+        if ($jawaban[$soal->id] === $soal->jawaban_benar) {
+            $bidangScores[$bidang]['benar']++;
+        }
+    }
+}
+
+// Tentuin kategori berdasarkan skor
+    $hasilAkhir = [];
+    foreach ($bidangScores as $bidang => $score) {
+        $persen = $score['total'] > 0 ? ($score['benar'] / $score['total']) * 100 : 0;
+
+        if ($persen >= 80) {
+            $level = 'Expert';
+            $saran = 'Tidak perlu training tambahan.';
+        } elseif ($persen >= 50) {
+            $level = 'Intermediate';
+            $saran = 'Disarankan ikut kelas lanjutan bidang ' . $bidang . '.';
+        } else {
+            $level = 'Beginner';
+            $saran = 'Wajib ikut training dasar bidang ' . $bidang . '.';
         }
 
-        return view('quiz.result', compact('score', 'total'));
+        $hasilAkhir[$bidang] = [
+            'level' => $level,
+            'saran' => $saran,
+    ];
+}
+
+return view('quiz.result', compact('hasilAkhir'));
+
     }
 }
 
