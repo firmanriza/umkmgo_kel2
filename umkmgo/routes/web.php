@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +38,6 @@ Route::middleware('auth')->group(function () {
 
     // Quiz
     Route::get('/kuis', [QuizController::class, 'kategori'])->name('kategori.index');
-    Route::get('/kategori/{id}/kuis', [QuizController::class, 'index'])->name('quiz.index');
     Route::get('/kuis/{id}', [QuizController::class, 'index'])->name('quiz.intro');
     Route::post('/quiz/{id}/submit', [QuizController::class, 'submit'])->name('quiz.submit');
     Route::get('/kuis/{id}', [QuizController::class, 'show'])->name('quiz.show');
@@ -60,8 +60,18 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}', [\App\Http\Controllers\ClassController::class, 'show'])->name('classes.show');
         Route::get('/{kategori_umkm_id}/final-quiz', [\App\Http\Controllers\ClassController::class, 'finalQuiz'])->name('classes.final_quiz');
         Route::get('/certificate/{id}', [\App\Http\Controllers\ClassController::class, 'certificate'])->name('classes.certificate');
+
+        // Admin-only CRUD routes for classes
+        Route::middleware('admin:admin')->group(function () {
+            Route::get('/create', [\App\Http\Controllers\ClassController::class, 'create'])->name('classes.create');
+            Route::post('/', [\App\Http\Controllers\ClassController::class, 'store'])->name('classes.store');
+            Route::get('/{id}/edit', [\App\Http\Controllers\ClassController::class, 'edit'])->name('classes.edit');
+            Route::put('/{id}', [\App\Http\Controllers\ClassController::class, 'update'])->name('classes.update');
+            Route::delete('/{id}', [\App\Http\Controllers\ClassController::class, 'destroy'])->name('classes.destroy');
+        });
     });
 
+    
 
     // Article routes accessible to all authenticated users except destroy
     Route::resource('articles', ArticleController::class)->except(['destroy']);
@@ -75,13 +85,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
         Route::post('/users/{user}/role', [AdminController::class, 'updateRole'])->name('admin.users.updateRole');
 
-        // Admin class CRUD routes
-        Route::get('/classes', [AdminController::class, 'classesIndex'])->name('admin.classes.index');
-        Route::get('/classes/create', [AdminController::class, 'createClass'])->name('admin.classes.create');
-        Route::post('/classes', [AdminController::class, 'storeClass'])->name('admin.classes.store');
-        Route::get('/classes/{id}/edit', [AdminController::class, 'editClass'])->name('admin.classes.edit');
-        Route::put('/classes/{id}', [AdminController::class, 'updateClass'])->name('admin.classes.update');
-        Route::delete('/classes/{id}', [AdminController::class, 'destroyClass'])->name('admin.classes.destroy');
 
         // Admin certificate assignment routes
         Route::get('/certificates/assign', [AdminController::class, 'assignCertificateForm'])->name('admin.certificates.assign');

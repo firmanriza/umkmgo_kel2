@@ -4,6 +4,12 @@
 <div class="container">
     <h1>Pilih Kategori dan Bidang Kelas</h1>
 
+    @if(auth()->user() && auth()->user()->role === 'admin')
+    <div class="mb-3">
+        <a href="{{ route('classes.create') }}" class="btn btn-success">Tambah Kelas Baru</a>
+    </div>
+    @endif
+
     <form action="{{ route('classes.list') }}" method="GET" class="mb-4">
         <div class="mb-3">
             <label for="kategori_umkm_id" class="form-label">Kategori UMKM</label>

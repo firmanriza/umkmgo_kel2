@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\User;
 use App\Models\ClassModel;
 
-class ClassPolicy
+class ClassModelPolicy
 {
     /**
      * Determine whether the user can view any classes.

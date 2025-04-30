@@ -24,7 +24,7 @@
         <div class="card p-3" style="flex:1; background-color:#0d6efd; color:white; border-radius:10px;">
             <h3>Manajemen Kelas</h3>
             <p>CRUD kelas luring/daring dari kategori UMKM dan bidangnya.</p>
-            <a href="{{ route('admin.classes.index') }}" class="btn btn-light">Kelola Kelas</a>
+            <a href="{{ route('classes.index') }}" class="btn btn-light">Kelola Kelas</a>
         </div>
         <div class="card p-3" style="flex:1; background-color:#dc3545; color:white; border-radius:10px;">
             <h3>Manajemen Sertifikat</h3>

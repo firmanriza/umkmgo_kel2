@@ -4,7 +4,7 @@
 <div class="container">
     <h1>Tambah Sertifikat</h1>
 
-    <form action="{{ route('admin.certificates.store') }}" method="POST">
+    <form action="{{ route('certificates.store') }}" method="POST">
         @csrf
 
         <div class="mb-3">
