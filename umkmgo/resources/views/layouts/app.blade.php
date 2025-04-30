@@ -161,7 +161,6 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
                 @else
 
-                    <a class="nav-link {{ request()->routeIs('kategori.index') ? 'active' : '' }}" href="{{ route('kategori.index') }}">Quiz</a>
                     <a class="nav-link {{ request()->routeIs('articles.*') ? 'active' : '' }}" href="{{ route('articles.index') }}">Artikel</a>
 
 

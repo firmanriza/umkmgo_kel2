@@ -9,10 +9,12 @@ class ClassModel extends Model
     protected $table = 'classes';
 
     protected $fillable = [
-        'type',
+        'title',
         'kategori_umkm_id',
         'field',
         'level',
+        'type',
+        'description',
         'video_url',
         'schedule_info',
     ];

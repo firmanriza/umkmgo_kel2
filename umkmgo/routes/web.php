@@ -6,6 +6,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ClassController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +22,6 @@ Route::get('/', function () {
 
 // Auth routes (login, register, etc.)
 Auth::routes();
-
-use App\Http\Controllers\AdminController;
 
 Route::middleware('auth')->group(function () {
 
@@ -54,7 +53,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/{id}/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save_answer');
         Route::post('/{id}/submit', [QuizController::class, 'finalSubmit'])->name('quiz.final_submit');
     });
-
     // Classes routes
     Route::prefix('classes')->group(function () {
         Route::get('/', [\App\Http\Controllers\ClassController::class, 'index'])->name('classes.index');
@@ -64,23 +62,30 @@ Route::middleware('auth')->group(function () {
         Route::get('/certificate/{id}', [\App\Http\Controllers\ClassController::class, 'certificate'])->name('classes.certificate');
     });
 
-    //edukasi - admin only for CRUD
-    Route::middleware('admin')->group(function () {
-        Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
-        Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
-        Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
-        Route::get('/articles/{id}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
-        Route::put('/articles/{id}', [ArticleController::class, 'update'])->name('articles.update');
-        Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('articles.destroy');
-        Route::get('/articles/{id}', [ArticleController::class, 'show'])->name('articles.show');
-    });
+
+    // Article routes accessible to all authenticated users except destroy
+    Route::resource('articles', ArticleController::class)->except(['destroy']);
+    Route::resource('articles', ArticleController::class)->except(['destroy']);
+
+    // Article delete only admin
+    Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->middleware('admin')->name('articles.destroy');
 
     // Admin user management and other admin features
     Route::middleware('admin')->prefix('admin')->group(function () {
         Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
         Route::post('/users/{user}/role', [AdminController::class, 'updateRole'])->name('admin.users.updateRole');
-        // Additional admin routes for classes, certificates, etc. can be added here
-    });
 
+        // Admin class CRUD routes
+        Route::get('/classes', [AdminController::class, 'classesIndex'])->name('admin.classes.index');
+        Route::get('/classes/create', [AdminController::class, 'createClass'])->name('admin.classes.create');
+        Route::post('/classes', [AdminController::class, 'storeClass'])->name('admin.classes.store');
+        Route::get('/classes/{id}/edit', [AdminController::class, 'editClass'])->name('admin.classes.edit');
+        Route::put('/classes/{id}', [AdminController::class, 'updateClass'])->name('admin.classes.update');
+        Route::delete('/classes/{id}', [AdminController::class, 'destroyClass'])->name('admin.classes.destroy');
+
+        // Admin certificate assignment routes
+        Route::get('/certificates/assign', [AdminController::class, 'assignCertificateForm'])->name('admin.certificates.assign');
+        Route::post('/certificates', [AdminController::class, 'storeCertificate'])->name('admin.certificates.store');
+    });
 
 });
