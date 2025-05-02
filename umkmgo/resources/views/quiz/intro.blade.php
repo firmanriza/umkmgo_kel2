@@ -7,7 +7,7 @@
     </h1>
     
     <p class="text-lg text-white/90 mb-6 drop-shadow">
-        Ayo mulai kuis awal untuk tahu seberapa besar UMKM-mu sudah berkembang!
+    Ayo mulai kuis awal untuk tahu seberapa besar UMKM-mu sudah berkembang!
     </p>
 
     @if($quiz)

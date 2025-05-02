@@ -5,6 +5,8 @@
     <title>UMKMGo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+
     
     <style>
     :root {
@@ -22,8 +24,20 @@
 
 
     .navbar {
-    background-color: #0d6efd; 
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+        background-color: #0d6efd; 
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+        min-height: 60px;
+        padding-top: 0;
+        padding-bottom: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .navbar-brand img {
+        height: 70px; /* Ukuran besar logo */
+        object-fit: contain;
+        margin-top: -10px;  /* Mengimbangi jika logo terlalu tinggi */
+        margin-bottom: -10px;
     }
 
 
@@ -93,13 +107,53 @@
 
 </style>
 
+<style>
+
+
+
+    .custom-button-blue {
+        background-color: #007bff;
+        color: white;
+        padding: 6px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .custom-button-blue:hover {
+        background-color: #0069d9;
+    }
+
+    .custom-button-orange {
+        background-color: #fd7e14;
+        color: white;
+        padding: 6px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .custom-button-orange:hover {
+        background-color: #e96b0c;
+    }
+    
+</style>
+
+
 @stack('scripts')
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg">
     <div class="container">
-    <a class="navbar-brand fw-bold" href="{{ url('/home') }}">UMKMGo</a>
+    <a class="navbar-brand d-flex align-items-center" href="{{ url('/home') }}">
+    <img src="{{ asset('images/logoumkm.png') }}" alt="UMKMGo Logo">
+    </a>
+
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
                 @guest
@@ -107,7 +161,8 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
                 @else
 
-                    <a class="nav-link {{ request()->routeIs('kategori.index') ? 'active' : '' }}" href="{{ route('kategori.index') }}">Quiz</a>
+                    <a class="nav-link {{ request()->routeIs('articles.*') ? 'active' : '' }}" href="{{ route('articles.index') }}">Artikel</a>
+
 
                     <li class="nav-item"><a class="nav-link" href="{{ route('forum.index') }}">Forum</a></li>
                     <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
