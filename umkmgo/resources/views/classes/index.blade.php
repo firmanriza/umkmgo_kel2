@@ -1,56 +1,41 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Pilih Kategori dan Bidang Kelas</h1>
+<div class="container py-4">
+    <h1 class="mb-4">Daftar Kategori Kelas</h1>
 
-    @if(auth()->user() && auth()->user()->role === 'admin')
-    <div class="mb-3">
-        <a href="{{ route('classes.create') }}" class="btn btn-success">Tambah Kelas Baru</a>
+    <div class="card p-3 mb-4">
+        <form method="GET" action="{{ route('classes.list') }}">
+            <div class="row g-3">
+                <div class="col-md-3">
+                    <select name="kategori_umkm_id" id="kategori_umkm_id" class="form-select" style="color: black; background-color: white;">
+                        <option value="">-- Pilih Kategori --</option>
+                        @foreach($kategoris as $kategori)
+                            <option value="{{ $kategori->id }}" style="color: black; background-color: white;">{{ $kategori->nama_kategori }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="field" class="form-select">
+                        <option value="">Pilih Bidang</option>
+                        @foreach ($fields as $field)
+                            <option value="{{ $field }}">{{ ucfirst($field) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="level" class="form-select">
+                        <option value="">Pilih Level</option>
+                        @foreach ($levels as $level)
+                            <option value="{{ $level }}">{{ ucfirst($level) }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex align-items-center">
+                    <button class="btn btn-primary w-100" type="submit">Filter</button>
+                </div>
+            </div>
+        </form>
     </div>
-    @endif
-
-    <form action="{{ route('classes.list') }}" method="GET" class="mb-4">
-        <div class="mb-3">
-            <label for="kategori_umkm_id" class="form-label">Kategori UMKM</label>
-            <select name="kategori_umkm_id" id="kategori_umkm_id" class="form-select" style="color: black; background-color: white;">
-                <option value="">-- Pilih Kategori --</option>
-                @foreach($kategoris as $kategori)
-                    <option value="{{ $kategori->id }}" style="color: black; background-color: white;">{{ $kategori->nama_kategori }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="field" class="form-label">Bidang</label>
-            <select name="field" id="field" class="form-select">
-                <option value="">-- Pilih Bidang --</option>
-                @foreach($fields as $field)
-                    <option value="{{ $field }}">{{ ucfirst($field) }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="level" class="form-label">Tingkatan Level</label>
-            <select name="level" id="level" class="form-select">
-                <option value="">-- Pilih Level --</option>
-                @foreach($levels as $level)
-                    <option value="{{ $level }}">{{ ucfirst($level) }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="mb-3">
-            <label for="type" class="form-label">Metode</label>
-            <select name="type" id="type" class="form-select">
-                <option value="">-- Pilih Metode --</option>
-                <option value="daring">Daring</option>
-                <option value="luring">Luring</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Cari Kelas</button>
-    </form>
 </div>
 @endsection

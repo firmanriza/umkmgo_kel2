@@ -1,23 +1,43 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Detail Kelas</h1>
+<div class="container py-4">
+    <h2 class="mb-3">{{ $class->title }}</h2>
 
-    <h3>{{ ucfirst($class->kategori->nama) }} - {{ ucfirst($class->field) }} - {{ ucfirst($class->level) }} ({{ ucfirst($class->type) }})</h3>
-
-    @if($class->type === 'daring')
-        <h4>Materi Video</h4>
-        <div class="ratio ratio-16x9">
-            <iframe src="{{ $class->video_url }}" title="YouTube video" allowfullscreen></iframe>
+    <div class="card p-3 mb-3 shadow-sm">
+        <div class="mb-2">
+            <strong>Kategori:</strong> {{ $class->kategori->nama_kategori ?? '-' }}
         </div>
-    @elseif($class->type === 'luring')
-        <h4>Jadwal Pelatihan</h4>
-        <p>{!! nl2br(e($class->schedule_info)) !!}</p>
-    @endif
 
-    <a href="{{ route('classes.final_quiz', $class->kategori_umkm_id) }}" class="btn btn-primary mt-3">Ikuti Kuis Akhir</a>
-    <a href="{{ route('classes.certificate', $class->id) }}" class="btn btn-success mt-3">Lihat Sertifikat</a>
-    <a href="{{ route('classes.list') }}" class="btn btn-secondary mt-3">Kembali ke Daftar Kelas</a>
+        <div class="mb-2">
+            <strong>Bidang:</strong> {{ ucfirst($class->field) }}
+        </div>
+
+        <div class="mb-2">
+            <strong>Tingkat:</strong> {{ ucfirst($class->level) }}
+        </div>
+
+        <div class="mb-2">
+            <strong>Jenis:</strong> {{ ucfirst($class->type) }}
+        </div>
+
+        <div class="mb-2">
+            <strong>Deskripsi:</strong><br>
+            {{ $class->description }}
+        </div>
+
+        @if ($class->type === 'daring')
+            <div class="mb-2">
+                <strong>Video Pembelajaran:</strong> 
+                <a href="{{ $class->video_url }}" target="_blank" class="btn btn-sm btn-outline-primary">Tonton Video</a>
+            </div>
+        @else
+            <div class="mb-2">
+                <strong>Jadwal Kelas Luring:</strong> {{ $class->schedule_info }}
+            </div>
+        @endif
+    </div>
+
+    <a href="{{ route('classes.final_quiz', $class->kategori_umkm_id) }}" class="btn btn-warning text-white mt-3">Ikuti Kuis Akhir</a>
 </div>
 @endsection

@@ -6,77 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\ClassModel;
 use App\Models\KategoriUmkm;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
 
 class ClassController extends Controller
 {
-    public function __construct()
-    {
-        // Apply auth middleware to all methods
-        $this->middleware('auth');
-
-        // Apply admin middleware only to CRUD methods, specifying 'admin' role
-        $this->middleware('admin:admin')->only(['create', 'store', 'edit', 'update', 'destroy']);
-    }
-
-    // Show categories and fields for class selection
     public function index()
     {
-        // Fetch all categories
-        $kategoris = KategoriUmkm::all();
-
-        // Define available fields and levels
+        $kategoris = KategoriUMKM::all();
         $fields = ClassModel::getAvailableFields();
         $levels = ['expert', 'intermediate', 'beginner'];
-
-        // Return the class selection view with data
+        $classes = ClassModel::latest()->get();
         return view('classes.index', compact('kategoris', 'fields', 'levels'));
     }
 
-    // Show classes filtered by category, field, level, and type
-    public function listClasses(Request $request)
-    {
-        $query = ClassModel::query();
-
-        if ($request->filled('kategori_umkm_id')) {
-            $query->where('kategori_umkm_id', $request->kategori_umkm_id);
-        }
-        if ($request->filled('field')) {
-            $query->where('field', $request->field);
-        }
-        if ($request->filled('level')) {
-            $query->where('level', $request->level);
-        }
-        if ($request->filled('type')) {
-            $query->where('type', $request->type);
-        }
-
-        $classes = $query->get();
-
-        return view('classes.list', compact('classes'));
-    }
-
-    // Show class detail with video or schedule info
-    public function show($id)
-    {
-        $class = ClassModel::with('kategori')->findOrFail($id);
-        return view('classes.show', compact('class'));
-    }
-
-    // Link to final quiz for the class category
-    public function finalQuiz($kategori_umkm_id)
-    {
-        return redirect()->route('quiz.final_intro', ['id' => $kategori_umkm_id]);
-    }
-
-    // Show certificate page (placeholder)
-    public function certificate($id)
-    {
-        // Implementation for certificate display after quiz completion
-        return view('classes.certificate', compact('id'));
-    }
-
-    // Show form to create a new class (admin only)
     public function create()
     {
         $this->authorize('create', ClassModel::class);
@@ -89,7 +30,6 @@ class ClassController extends Controller
         return view('classes.create', compact('kategoris', 'fields', 'levels', 'types'));
     }
 
-    // Store a new class (admin only)
     public function store(Request $request)
     {
         $this->authorize('create', ClassModel::class);
@@ -110,7 +50,12 @@ class ClassController extends Controller
         return redirect()->route('classes.index')->with('success', 'Kelas berhasil ditambahkan!');
     }
 
-    // Show form to edit a class (admin only)
+    public function show($id)
+    {
+        $class = ClassModel::with('kategori')->findOrFail($id);
+        return view('classes.show', compact('class'));
+    }
+
     public function edit($id)
     {
         $class = ClassModel::findOrFail($id);
@@ -124,7 +69,6 @@ class ClassController extends Controller
         return view('classes.edit', compact('class', 'kategoris', 'fields', 'levels', 'types'));
     }
 
-    // Update a class (admin only)
     public function update(Request $request, $id)
     {
         $class = ClassModel::findOrFail($id);
@@ -146,14 +90,44 @@ class ClassController extends Controller
         return redirect()->route('classes.index')->with('success', 'Kelas berhasil diperbarui!');
     }
 
-    // Delete a class (admin only)
     public function destroy($id)
     {
         $class = ClassModel::findOrFail($id);
         $this->authorize('delete', $class);
-
         $class->delete();
 
         return redirect()->route('classes.index')->with('success', 'Kelas berhasil dihapus!');
+    }
+
+    // Optional: jika ingin tetap menampilkan filter dan sertifikat
+    public function listClasses(Request $request)
+    {
+        $query = ClassModel::query();
+
+        if ($request->filled('kategori_umkm_id')) {
+            $query->where('kategori_umkm_id', $request->kategori_umkm_id);
+        }
+        if ($request->filled('field')) {
+            $query->where('field', $request->field);
+        }
+        if ($request->filled('level')) {
+            $query->where('level', $request->level);
+        }
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        $classes = $query->get();
+        return view('classes.list', compact('classes'));
+    }
+
+    public function finalQuiz($kategori_umkm_id)
+    {
+        return redirect()->route('quiz.final_intro', ['id' => $kategori_umkm_id]);
+    }
+
+    public function certificate($id)
+    {
+        return view('classes.certificate', compact('id'));
     }
 }

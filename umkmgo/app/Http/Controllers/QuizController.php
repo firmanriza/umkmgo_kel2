@@ -6,10 +6,11 @@ use App\Models\Quiz;
 use App\Models\Soal;
 use Illuminate\Http\Request;
 use App\Models\KategoriUmkm;
+use App\Models\ClassModel;
 
 class QuizController extends Controller
 {
-
+ 
     public function finalQuiz()
     {
         $kategoris = KategoriUmkm::with('quizzes')->get();
@@ -51,59 +52,86 @@ class QuizController extends Controller
     }
 
     public function finalSubmit(Request $request, $id)
-    {
-        try {
-            $quiz = Quiz::with(['soals', 'kategori'])->findOrFail($id);
-            $jawaban = $request->input('jawaban', []);
-            
-            // If no answers provided, get from session
-            if (empty($jawaban)) {
-                $jawaban = $request->session()->get("quiz.{$id}.answers", []);
-            }
+{
+    try {
+        // Mendapatkan kuis, soal, dan kategori
+        $quiz = Quiz::with(['soals', 'kategori'])->findOrFail($id);
+        $jawaban = $request->input('jawaban', []);
+        
+        if (empty($jawaban)) {
+            $jawaban = $request->session()->get("quiz.{$id}.answers", []);
+        }
 
-            // Validate all questions are answered
-            if (count($jawaban) !== $quiz->soals->count()) {
-                return redirect()->back()->with('error', 'Mohon jawab semua pertanyaan.');
-            }
+        if (count($jawaban) !== $quiz->soals->count()) {
+            return redirect()->back()->with('error', 'Mohon jawab semua pertanyaan.');
+        }
 
-            $score = 0;
-            $total = $quiz->soals->count();
-            $correctAnswers = [];
-            $userAnswers = [];
+        // Menghitung skor per bidang hanya sekali
+        $bidangScores = [
+            'Marketing' => ['benar' => 0, 'total' => 0],
+            'Produksi' => ['benar' => 0, 'total' => 0],
+            'Service' => ['benar' => 0, 'total' => 0],
+        ];
 
-            foreach ($quiz->soals as $soal) {
-                $userAnswer = $jawaban[$soal->id] ?? '';
-                $correctAnswer = $soal->jawaban_benar;
-                
-                $userAnswers[$soal->id] = $userAnswer;
-                $correctAnswers[$soal->id] = $correctAnswer;
-
-                if (strcasecmp($userAnswer, $correctAnswer) === 0) {
-                    $score++;
+        // Menghitung skor per bidang
+        foreach ($quiz->soals as $soal) {
+            $bidang = $soal->bidang;
+            if (isset($jawaban[$soal->id])) {
+                $bidangScores[$bidang]['total']++;
+                if ($jawaban[$soal->id] === $soal->jawaban_benar) {
+                    $bidangScores[$bidang]['benar']++;
                 }
             }
-
-            // Clear session answers after submission
-            $request->session()->forget("quiz.{$id}.answers");
-
-            return view('quiz.final_result', compact(
-                'score',
-                'total',
-                'correctAnswers',
-                'userAnswers',
-                'quiz'
-            ));
-
-        } catch (\Exception $e) {
-            \Log::error('Error in finalSubmit:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            return redirect()->back()
-                ->with('error', 'Terjadi kesalahan saat memproses kuis.');
         }
+
+        // Menyiapkan hasil akhir dan rekomendasi kelas
+        $hasilAkhir = [];
+        $recommendedClasses = collect();  // Pastikan inisialisasi koleksi ini
+
+        // Menggunakan perhitungan yang sudah ada untuk $hasilAkhir
+        foreach ($bidangScores as $bidang => $score) {
+            $persen = $score['total'] > 0 ? ($score['benar'] / $score['total']) * 100 : 0;
+
+            if ($persen >= 80) {
+                $level = 'Expert';
+                $saran = 'Tidak perlu training tambahan.';
+            } elseif ($persen >= 50) {
+                $level = 'Intermediate';
+                $saran = 'Disarankan ikut kelas lanjutan bidang ' . $bidang . '.';
+            } else {
+                $level = 'Beginner';
+                $saran = 'Wajib ikut training dasar bidang ' . $bidang . '.';
+            }
+
+            // Simpan hasil akhir untuk tiap bidang
+            $hasilAkhir[$bidang] = [
+                'level' => $level,
+                'saran' => $saran,
+            ];
+
+            // Mendapatkan kelas yang direkomendasikan berdasarkan bidang dan level
+            if (in_array($level, ['Beginner', 'Intermediate'])) {
+                $matchedClasses = ClassModel::where('field', $bidang)
+                    ->where('level', strtolower($level)) // Ubah level ke lowercase jika perlu
+                    ->get();
+                $recommendedClasses = $recommendedClasses->merge($matchedClasses);
+            }
+        }
+
+        // Mengirimkan ke view
+        return view('quiz.result', compact('hasilAkhir', 'recommendedClasses'));
+
+    } catch (\Exception $e) {
+        \Log::error('Error in finalSubmit:', [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+        return redirect()->back()
+            ->with('error', 'Terjadi kesalahan saat memproses kuis.');
     }
+}
+
+
     public function kategori()
     {
         $kategoris = KategoriUmkm::all();
@@ -166,47 +194,55 @@ class QuizController extends Controller
         $quiz = Quiz::with('soals')->findOrFail($id);
 
         $bidangScores = [
-        'Marketing' => ['benar' => 0, 'total' => 0],
-        'Produksi' => ['benar' => 0, 'total' => 0],
-        'Service' => ['benar' => 0, 'total' => 0],
-];
+            'Marketing' => ['benar' => 0, 'total' => 0],
+            'Produksi' => ['benar' => 0, 'total' => 0],
+            'Service' => ['benar' => 0, 'total' => 0],
+        ];
 
         foreach ($quiz->soals as $soal) {
             $bidang = $soal->bidang;
 
-        if (isset($jawaban[$soal->id])) {
-            $bidangScores[$bidang]['total']++;
+            if (isset($jawaban[$soal->id])) {
+                $bidangScores[$bidang]['total']++;
 
-        if ($jawaban[$soal->id] === $soal->jawaban_benar) {
-            $bidangScores[$bidang]['benar']++;
-        }
-    }
-}
-
-// Tentuin kategori berdasarkan skor
-    $hasilAkhir = [];
-    foreach ($bidangScores as $bidang => $score) {
-        $persen = $score['total'] > 0 ? ($score['benar'] / $score['total']) * 100 : 0;
-
-        if ($persen >= 80) {
-            $level = 'Expert';
-            $saran = 'Tidak perlu training tambahan.';
-        } elseif ($persen >= 50) {
-            $level = 'Intermediate';
-            $saran = 'Disarankan ikut kelas lanjutan bidang ' . $bidang . '.';
-        } else {
-            $level = 'Beginner';
-            $saran = 'Wajib ikut training dasar bidang ' . $bidang . '.';
+                if ($jawaban[$soal->id] === $soal->jawaban_benar) {
+                    $bidangScores[$bidang]['benar']++;
+                }
+            }
         }
 
-        $hasilAkhir[$bidang] = [
-            'level' => $level,
-            'saran' => $saran,
-    ];
-}
+        // Tentuin kategori berdasarkan skor
+        $hasilAkhir = [];
+        $recommendedClasses = collect();
 
-return view('quiz.result', compact('hasilAkhir'));
+        foreach ($bidangScores as $bidang => $score) {
+            $persen = $score['total'] > 0 ? ($score['benar'] / $score['total']) * 100 : 0;
 
+            if ($persen >= 80) {
+                $level = 'Expert';
+                $saran = 'Tidak perlu training tambahan.';
+            } elseif ($persen >= 50) {
+                $level = 'Intermediate';
+                $saran = 'Disarankan ikut kelas lanjutan bidang ' . $bidang . '.';
+            } else {
+                $level = 'Beginner';
+                $saran = 'Wajib ikut training dasar bidang ' . $bidang . '.';
+            }
+
+            $hasilAkhir[$bidang] = [
+                'level' => $level,
+                'saran' => $saran,
+            ];
+
+            // Mendapatkan kelas yang direkomendasikan berdasarkan bidang dan level
+            if (in_array($level, ['Beginner', 'Intermediate'])) {
+                $matchedClasses = ClassModel::where('field', $bidang)
+                    ->where('level', strtolower($level))
+                    ->get();
+                $recommendedClasses = $recommendedClasses->merge($matchedClasses);
+            }
+        }
+
+        return view('quiz.result', compact('hasilAkhir', 'recommendedClasses'));
     }
 }
-
