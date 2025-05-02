@@ -1,21 +1,20 @@
-@extends('layouts.app')
+<h2 class="text-2xl font-bold mb-6 text-center">{{ $quiz->nama_quiz }}</h2>
 
-@section('content')
-<div class="container text-center">
-    <h2 class="text-2xl font-bold mb-4">Hasil Kuis</h2>
+@foreach($soalsGrouped as $bidang => $soals)
+    <div class="mb-6">
+        <h3 class="text-xl font-semibold mb-2 text-indigo-600">{{ $bidang }}</h3>
 
-    <div class="bg-white shadow rounded p-6 mb-4">
-        <p class="text-xl">Skor kamu: <strong>{{ $score }} / {{ $total }}</strong></p>
-
-        @if($score == $total)
-            <p class="text-green-600 mt-4">Keren! Kamu menjawab semua pertanyaan dengan benar! 🔥</p>
-        @elseif($score >= ($total / 2))
-            <p class="text-yellow-600 mt-4">Lumayan bagus, tapi masih bisa ditingkatkan!</p>
-        @else
-            <p class="text-red-600 mt-4">Kamu butuh belajar lebih lanjut, tetap semangat 💪</p>
-        @endif
+        @foreach($soals as $index => $soal)
+            <div class="mb-4">
+                <p class="font-medium">{{ $index + 1 }}. {{ $soal->pertanyaan }}</p>
+                <ul class="list-disc ml-6 text-gray-700">
+                    <li>A. {{ $soal->pilihan_a }}</li>
+                    <li>B. {{ $soal->pilihan_b }}</li>
+                    <li>C. {{ $soal->pilihan_c }}</li>
+                    <li>D. {{ $soal->pilihan_d }}</li>
+                </ul>
+            </div>
+        @endforeach
     </div>
-
-    <a href="{{ route('home') }}" class="text-blue-600 underline">Kembali ke Beranda</a>
-</div>
-@endsection
+    <hr class="my-4">
+@endforeach

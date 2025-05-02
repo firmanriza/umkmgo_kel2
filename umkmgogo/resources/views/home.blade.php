@@ -24,12 +24,13 @@
         <div class="card p-3" style="flex:1; background-color:#0d6efd; color:white; border-radius:10px;">
             <h3>Manajemen Kelas</h3>
             <p>CRUD kelas luring/daring dari kategori UMKM dan bidangnya.</p>
-            <a href="#" class="btn btn-light">Kelola Kelas</a>
+            <a href="{{ route('classes.index') }}" class="btn btn-light">Kelola Kelas</a>
+            <a href="{{ route('classes.create') }}" class="btn btn-light mt-2">Tambah Kelas</a>
         </div>
         <div class="card p-3" style="flex:1; background-color:#dc3545; color:white; border-radius:10px;">
             <h3>Manajemen Sertifikat</h3>
             <p>Tambah sertifikat untuk pengguna yang menyelesaikan kelas dan quiz akhir.</p>
-            <a href="#" class="btn btn-light">Kelola Sertifikat</a>
+            <a href="{{ route('admin.certificates.assign') }}" class="btn btn-light">Kelola Sertifikat</a>
         </div>
     </div>
 </div>
@@ -63,6 +64,14 @@
                 <button class="custom-button w-100">Kuis Akhir</button>
             </a>
         </div>
+    </div>
+
+    {{-- Card Kelas --}}
+    <div class="glass-card">
+        <p>Pilih dan ikuti kelas daring atau luring sesuai minat dan kebutuhanmu.</p>
+        <a href="{{ route('classes.index') }}">
+            <button class="custom-button mt-3">Masuk ke Kelas</button>
+        </a>
     </div>
 </div>
 @endif

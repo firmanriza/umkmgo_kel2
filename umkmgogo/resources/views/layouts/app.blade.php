@@ -6,7 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
-
+    
     
     <style>
     :root {
@@ -110,6 +110,18 @@
 <style>
 
 
+    .nav-tabs .nav-link.active {
+        background-color: #fd7e14 !important; /* Warna orange */
+        color: white !important;
+        border-color: #fd7e14 #fd7e14 #fff !important;
+    }
+    .nav-tabs .nav-link {
+        color: #fd7e14;
+    }
+    .nav-tabs .nav-link:hover {
+        color: #e96b0c;
+    }
+
 
     .custom-button-blue {
         background-color: #007bff;
@@ -161,7 +173,6 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
                 @else
 
-                    <a class="nav-link {{ request()->routeIs('kategori.index') ? 'active' : '' }}" href="{{ route('kategori.index') }}">Quiz</a>
                     <a class="nav-link {{ request()->routeIs('articles.*') ? 'active' : '' }}" href="{{ route('articles.index') }}">Artikel</a>
 
 
@@ -177,6 +188,6 @@
 <div class="container mt-4">
     @yield('content')
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

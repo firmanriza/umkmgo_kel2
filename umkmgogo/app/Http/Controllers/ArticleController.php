@@ -14,10 +14,13 @@ class ArticleController extends Controller
     }
 
     public function create() {
+        $this->authorize('create', Article::class);
         return view('articles.create');
     }
 
     public function store(Request $request) {
+        $this->authorize('create', Article::class);
+
         $request->validate([
             'title' => 'required',
             'content' => 'required',
@@ -37,11 +40,13 @@ class ArticleController extends Controller
 
     public function edit($id) {
         $article = Article::findOrFail($id);
+        $this->authorize('update', $article);
         return view('articles.edit', compact('article'));
     }
 
     public function update(Request $request, $id) {
         $article = Article::findOrFail($id);
+        $this->authorize('update', $article);
 
         $request->validate([
             'title' => 'required',
@@ -66,14 +71,15 @@ class ArticleController extends Controller
 
     public function destroy($id) {
         $article = Article::findOrFail($id);
+        $this->authorize('delete', $article);
+
         if ($article->image) Storage::disk('public')->delete($article->image);
         $article->delete();
         return redirect()->route('articles.index')->with('success', 'Artikel berhasil dihapus!');
     }    
+
     public function show($id) {
         $article = Article::findOrFail($id);
         return view('articles.show', compact('article'));
     }
-
-    
 }
