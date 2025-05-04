@@ -43,9 +43,17 @@ class ClassController extends Controller
             'description' => 'nullable|string',
             'video_url' => 'nullable|url',
             'schedule_info' => 'nullable|string',
+            'material_pdf' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
-        ClassModel::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('material_pdf')) {
+            $path = $request->file('material_pdf')->store('materials', 'public');
+            $data['material_pdf'] = $path;
+        }
+
+        ClassModel::create($data);
 
         return redirect()->route('classes.index')->with('success', 'Kelas berhasil ditambahkan!');
     }
@@ -83,9 +91,17 @@ class ClassController extends Controller
             'description' => 'nullable|string',
             'video_url' => 'nullable|url',
             'schedule_info' => 'nullable|string',
+            'material_pdf' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
-        $class->update($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('material_pdf')) {
+            $path = $request->file('material_pdf')->store('materials', 'public');
+            $data['material_pdf'] = $path;
+        }
+
+        $class->update($data);
 
         return redirect()->route('classes.index')->with('success', 'Kelas berhasil diperbarui!');
     }

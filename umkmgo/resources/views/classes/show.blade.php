@@ -36,6 +36,14 @@
                 <strong>Jadwal Kelas Luring:</strong> {{ $class->schedule_info }}
             </div>
         @endif
+
+        @if($class->material_pdf)
+            <div class="mb-2">
+                <strong>Materi PDF:</strong><br>
+                <embed src="{{ asset('storage/' . $class->material_pdf) }}" type="application/pdf" width="100%" height="600px" />
+                <a href="{{ asset('storage/' . $class->material_pdf) }}" target="_blank" class="btn btn-sm btn-outline-success mt-2">Download Materi</a>
+            </div>
+        @endif
     </div>
 
     <a href="{{ route('classes.final_quiz', $class->kategori_umkm_id) }}" class="btn btn-warning text-white mt-3">Ikuti Kuis Akhir</a>

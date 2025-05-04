@@ -5,7 +5,7 @@
     <h1 class="mb-4">Edit Kelas</h1>
 
     <div class="card p-4">
-        <form action="{{ route('classes.update', $class->id) }}" method="POST">
+        <form action="{{ route('classes.update', $class->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -76,6 +76,13 @@
                 <label for="schedule_info" class="form-label">Info Jadwal (opsional)</label>
                 <textarea name="schedule_info" id="schedule_info" class="form-control" rows="3">{{ old('schedule_info', $class->schedule_info) }}</textarea>
             </div>
+
+            @if(auth()->user() && auth()->user()->role === 'admin')
+                <div class="mb-3">
+                    <label for="material_pdf" class="form-label">Upload Materi PDF</label>
+                    <input type="file" name="material_pdf" id="material_pdf" class="form-control" accept="application/pdf">
+                </div>
+            @endif
 
             <button type="submit" class="btn btn-primary">Perbarui Kelas</button>
         </form>

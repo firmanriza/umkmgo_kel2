@@ -30,7 +30,7 @@
                         <p class="card-text mb-2">{{ $class->description }}</p>
                         <a href="{{ route('classes.show', $class->id) }}" class="btn btn-sm btn-outline-primary me-2">Detail</a>
                         @if(auth()->user() && auth()->user()->role === 'admin')
-                            <a href="{{ route('classes.edit', $class->id) }}" class="btn btn-sm btn-warning text-white">Update</a>
+                            <a href="{{ route('classes.edit', $class->id) }}" class="btn btn-sm btn-warning text-white">Edit</a>
                         @endif
                     </div>
                 </div>
@@ -48,9 +48,6 @@
                         <h5 class="card-title">{{ $class->title }}</h5>
                         <p class="card-text mb-2">{{ $class->description }}</p>
                         <a href="{{ route('classes.show', $class->id) }}" class="btn btn-sm btn-outline-primary">Detail</a>
-                        @if(auth()->user() && auth()->user()->role === 'admin')
-                            <a href="{{ route('classes.edit', $class->id) }}" class="btn btn-sm btn-warning text-white">Update</a>
-                        @endif
                     </div>
                 </div>
             @empty

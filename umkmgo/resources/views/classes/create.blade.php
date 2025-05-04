@@ -4,7 +4,7 @@
 <div class="container py-4">
     <h2 class="mb-4">{{ isset($class) ? 'Edit Kelas' : 'Tambah Kelas' }}</h2>
     <div class="card p-4">
-        <form action="{{ isset($class) ? route('classes.update', $class->id) : route('classes.store') }}" method="POST">
+        <form action="{{ isset($class) ? route('classes.update', $class->id) : route('classes.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @if (isset($class))
                 @method('PUT')
@@ -72,6 +72,13 @@
                 <label for="description" class="form-label">Deskripsi</label>
                 <textarea name="description" class="form-control">{{ old('description', $class->description ?? '') }}</textarea>
             </div>
+
+            @if(auth()->user() && auth()->user()->role === 'admin')
+                <div class="mb-3">
+                    <label for="material_pdf" class="form-label">Upload Materi PDF</label>
+                    <input type="file" name="material_pdf" id="material_pdf" class="form-control" accept="application/pdf">
+                </div>
+            @endif
 
             <button type="submit" class="btn btn-success">Simpan</button>
         </form>

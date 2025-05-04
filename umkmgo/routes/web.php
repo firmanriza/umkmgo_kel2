@@ -103,4 +103,3 @@ Route::middleware('auth')->group(function () {
         Route::get('/certificates/assign', [AdminController::class, 'assignCertificateForm'])->name('admin.certificates.assign');
         Route::post('/certificates', [AdminController::class, 'storeCertificate'])->name('admin.certificates.store');
     });
-

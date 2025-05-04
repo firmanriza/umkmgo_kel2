@@ -14,12 +14,14 @@
             <td>
                 <form action="{{ route('admin.users.updateRole', $user->id) }}" method="POST">
                     @csrf
+                    @method('PUT') {{-- Penting agar route PUT bisa diterima --}}
                     <select name="role" class="form-select" onchange="this.form.submit()">
                         <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>User</option>
                         <option value="mentor" {{ $user->role == 'mentor' ? 'selected' : '' }}>Mentor</option>
                         <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
                     </select>
                 </form>
+
             </td>
         </tr>
         @endforeach
