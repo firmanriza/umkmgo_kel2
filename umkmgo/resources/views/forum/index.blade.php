@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<h2 class="mb-4">Diskusi UMKM</h2>
+<h1 class="text-white mb-4 mt-5" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+    <b>Diskusi</b>     
+    <span class="fw-bold px-2 py-1" style="background-color: #FF6B00; border-radius: 20px;">
+        UMKM
+    </span>
+</h1>
 
 <a href="{{ route('forum.create') }}">
     <button class="custom-button mb-4">Tambah Diskusi</button>

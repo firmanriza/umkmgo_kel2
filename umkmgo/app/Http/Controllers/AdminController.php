@@ -2,37 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\ClassModel;
-use App\Models\Certificate;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    // Menambahkan middleware 'admin' pada constructor
     public function __construct()
     {
-        $this->middleware(['auth', 'superadmin']);
+        $this->middleware('admin');
     }
 
-    // Show list of users for admin to manage roles
+    // Menampilkan daftar pengguna
     public function index()
     {
         $users = User::all();
         return view('admin.users.index', compact('users'));
     }
 
-    // Update user role (e.g., assign Mentor role)
+    // Memperbarui peran pengguna
     public function updateRole(Request $request, User $user)
     {
+        // Validasi input untuk memastikan hanya role yang valid
         $request->validate([
             'role' => 'required|in:user,mentor,admin',
         ]);
 
+        // Perbarui role pengguna
         $user->role = $request->role;
         $user->save();
 
+        // Redirect ke halaman admin.users.index dengan pesan sukses
         return redirect()->route('admin.users.index')->with('success', 'Role pengguna berhasil diperbarui.');
     }
-
-   
 }

@@ -10,16 +10,13 @@ use Illuminate\Support\Facades\Storage;
 class ClassController extends Controller
 {
     public function index()
-{
-    $classes = ClassModel::latest()->get();
-    $kategoris = \App\Models\KategoriUmkm::all();
-    $fields = ClassModel::getAvailableFields();
-    $levels = ['expert', 'intermediate', 'beginner'];
-    $types = ['daring', 'luring'];
-
-    return view('classes.index', compact('classes', 'kategoris', 'fields', 'levels', 'types'));
-}
-
+    {
+        $kategoris = KategoriUMKM::all();
+        $fields = ClassModel::getAvailableFields();
+        $levels = ['expert', 'intermediate', 'beginner'];
+        $classes = ClassModel::latest()->get();
+        return view('classes.index', compact('kategoris', 'fields', 'levels'));
+    }
 
     public function create()
     {

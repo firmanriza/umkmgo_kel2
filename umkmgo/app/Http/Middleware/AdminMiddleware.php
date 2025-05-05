@@ -13,17 +13,23 @@ class AdminMiddleware
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     * @param  mixed ...$roles
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
-    {
-        // Mengecek apakah user sudah terautentikasi dan memiliki role 'admin'
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            return $next($request);
-        }
+    // public function handle($request, Closure $next, ...$roles)
+    // {
+    //     if (Auth::check() && in_array(Auth::user()->role, $roles)) {
+    //         return $next($request);
+    //     }
 
-        // Jika bukan admin, batalkan dengan 403 Forbidden
-        abort(403, 'Unauthorized access.');
+    //     abort(403, 'Unauthorized access.');
+    // }
+    public function handle($request, Closure $next)
+{
+    if (Auth::check() && Auth::user()->role === 'admin') {
+        return $next($request);
     }
-}
 
+    abort(403); // Forbidden jika bukan admin
+}
+}

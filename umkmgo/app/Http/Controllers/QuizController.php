@@ -246,4 +246,3 @@ class QuizController extends Controller
         return view('quiz.result', compact('hasilAkhir', 'recommendedClasses'));
     }
 }
-
