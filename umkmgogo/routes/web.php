@@ -8,14 +8,9 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfileController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
 
-// Arahkan root '/' ke login jika belum login, ke dashboard jika sudah login
 
 Route::get('/', function () {
     return redirect()->route(auth()->check() ? 'home' : 'login');
@@ -28,6 +23,10 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    // Profile UMKM routes
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
     // Forum Diskusi
     Route::resource('forum', ForumController::class)->except(['destroy']);
@@ -54,6 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/summary', [QuizController::class, 'finalSummary'])->name('quiz.final_summary');
         Route::post('/{id}/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save_answer');
         Route::post('/{id}/submit', [QuizController::class, 'finalSubmit'])->name('quiz.final_submit');
+        
     });
     // Classes routes
     // Route::prefix('classes')->group(function () {
@@ -72,18 +72,22 @@ Route::middleware('auth')->group(function () {
     //         Route::delete('/{id}', [\App\Http\Controllers\ClassController::class, 'destroy'])->name('classes.destroy');
     //     });
     // });
+    
     // Route resource untuk semua authenticated user (kecuali destroy)
     Route::resource('classes', \App\Http\Controllers\ClassController::class)->except(['destroy']);
 
     // Route khusus untuk delete class oleh admin
-    Route::delete('/classes/{class}', [\App\Http\Controllers\ClassController::class, 'destroy'])
-        ->middleware('admin')
-        ->name('classes.destroy');
+    // Route::delete('/classes/{class}', [\App\Http\Controllers\ClassController::class, 'destroy'])
+    //     ->middleware('admin')
+    //     ->name('classes.destroy');
+
+    Route::delete('/classes/{class}', [\App\Http\Controllers\ClassController::class, 'destroy'])->name('classes.destroy');
 
     // Route tambahan khusus class (jika tidak termasuk dalam resource)
     Route::get('/list', [\App\Http\Controllers\ClassController::class, 'listClasses'])->name('classes.list');
     Route::get('/classes/{kategori_umkm_id}/final-quiz', [\App\Http\Controllers\ClassController::class, 'finalQuiz'])->name('classes.final_quiz');
     Route::get('/classes/certificate/{id}', [\App\Http\Controllers\ClassController::class, 'certificate'])->name('classes.certificate');
+    
 
     
     // Article routes accessible to all authenticated users except destroy
