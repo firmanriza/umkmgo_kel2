@@ -45,53 +45,36 @@
 </style>
 
 <div class="container mt-4">
-    <!-- Header -->
     <div class="custom-header">
         <h2 class="mb-1">{{ $forum->title }}</h2>
+        <p class="fs-5">{{ $forum->content }}</p>
         <small>Diposting oleh <strong>{{ $forum->user->name }}</strong> pada {{ $forum->created_at->format('d M Y H:i') }}</small>
     </div>
 
-    <!-- Konten Forum -->
-    <div class="card custom-card mb-4">
-        <div class="card-body">
-            <p class="card-text fs-5">{{ $forum->content }}</p>
-        </div>
-    </div>
 
-    <!-- Komentar -->
-    <div class="card custom-card mb-4">
+
+ 
+    <div class="card custom-card custom-card-comment mb-4" style="background-color: white;">
         <div class="card-header bg-white">
             <h5 class="mb-0">Komentar</h5>
         </div>
         <div class="card-body">
-            @if ($forum->comments->count() > 0)
-                @foreach ($forum->comments as $comment)
-                    <div class="mb-3 border-bottom pb-2">
-                        <p class="mb-1 comment-author">{{ $comment->user->name }} mengatakan:</p>
-                        <p class="mb-0">{{ $comment->content }}</p>
-                        <div class="comment-time">{{ $comment->created_at->diffForHumans() }}</div>
-                    </div>
-                @endforeach
-            @else
+            @forelse ($forum->comments as $comment)
+                <div class="mb-3 border-bottom pb-2">
+                    <p class="mb-1 comment-author">{{ $comment->user->name }} mengatakan:</p>
+                    <p class="mb-0">{{ $comment->content }}</p>
+                    <div class="comment-time">{{ $comment->created_at->diffForHumans() }}</div>
+                </div>
+            @empty
                 <p class="text-muted">Belum ada komentar.</p>
-            @endif
+            @endforelse
         </div>
-    </div>
 
-    <!-- Form Komentar -->
-    <div class="card custom-card">
-        <div class="card-header bg-white">
-            <h5 class="mb-0">Tulis Komentar</h5>
-        </div>
         <div class="card-body">
             <form action="{{ route('comments.store') }}" method="POST">
                 @csrf
                 <input type="hidden" name="forum_id" value="{{ $forum->id }}">
-
-                <div class="form-group mb-3">
-                    <textarea name="content" class="form-control rounded-3" rows="3" placeholder="Tulis komentarmu..." required></textarea>
-                </div>
-
+                <textarea name="content" class="form-control mb-3" rows="3" placeholder="Tulis komentarmu..." required></textarea>
                 <button type="submit" class="custom-button">Kirim Komentar</button>
             </form>
         </div>

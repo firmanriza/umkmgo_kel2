@@ -4,7 +4,7 @@
 <div class="container">
     
 
-    <!-- Card for Title and Image -->
+
     <div class="card mb-4" style="background-color: white; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.1);">
         <div class="card-body">
             <h3 class="card-title">{{ $article->title }}</h3>
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <!-- Card for Article Content -->
+
     <div class="card" style="background-color: white; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.1);">
         <div class="card-body">
             <div class="text-gray-700 leading-relaxed">

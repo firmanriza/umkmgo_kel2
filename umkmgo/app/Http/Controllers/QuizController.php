@@ -43,7 +43,7 @@ class QuizController extends Controller
         $soalId = $request->input('soal_id');
         $answer = $request->input('answer');
         
-        // Save answer to session
+ 
         $answers = $request->session()->get("quiz.{$id}.answers", []);
         $answers[$soalId] = $answer;
         $request->session()->put("quiz.{$id}.answers", $answers);
@@ -54,7 +54,7 @@ class QuizController extends Controller
     public function finalSubmit(Request $request, $id)
 {
     try {
-        // Mendapatkan kuis, soal, dan kategori
+
         $quiz = Quiz::with(['soals', 'kategori'])->findOrFail($id);
         $jawaban = $request->input('jawaban', []);
         
@@ -66,14 +66,14 @@ class QuizController extends Controller
             return redirect()->back()->with('error', 'Mohon jawab semua pertanyaan.');
         }
 
-        // Menghitung skor per bidang hanya sekali
+        
         $bidangScores = [
             'Marketing' => ['benar' => 0, 'total' => 0],
             'Produksi' => ['benar' => 0, 'total' => 0],
             'Service' => ['benar' => 0, 'total' => 0],
         ];
 
-        // Menghitung skor per bidang
+        
         foreach ($quiz->soals as $soal) {
             $bidang = $soal->bidang;
             if (isset($jawaban[$soal->id])) {
@@ -84,11 +84,11 @@ class QuizController extends Controller
             }
         }
 
-        // Menyiapkan hasil akhir dan rekomendasi kelas
+        
         $hasilAkhir = [];
-        $recommendedClasses = collect();  // Pastikan inisialisasi koleksi ini
+        $recommendedClasses = collect();  
 
-        // Menggunakan perhitungan yang sudah ada untuk $hasilAkhir
+      
         foreach ($bidangScores as $bidang => $score) {
             $persen = $score['total'] > 0 ? ($score['benar'] / $score['total']) * 100 : 0;
 
@@ -211,7 +211,7 @@ class QuizController extends Controller
             }
         }
 
-        // Tentuin kategori berdasarkan skor
+        
         $hasilAkhir = [];
         $recommendedClasses = collect();
 

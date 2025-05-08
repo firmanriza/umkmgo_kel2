@@ -2,50 +2,102 @@
 
 @section('content')
 <div class="container py-4">
-    <h2 class="mb-3">{{ $class->title }}</h2>
+<h2 class="text-white mb-4"><b>{{ $class->title }}</b></h2>
 
-    <div class="card p-3 mb-3 shadow-sm">
-        <div class="mb-2">
-            <strong>Kategori:</strong> {{ $class->kategori->nama_kategori ?? '-' }}
-        </div>
-
-        <div class="mb-2">
-            <strong>Bidang:</strong> {{ ucfirst($class->field) }}
-        </div>
-
-        <div class="mb-2">
-            <strong>Tingkat:</strong> {{ ucfirst($class->level) }}
-        </div>
-
-        <div class="mb-2">
-            <strong>Jenis:</strong> {{ ucfirst($class->type) }}
-        </div>
-
-        <div class="mb-2">
-            <strong>Deskripsi:</strong><br>
-            {{ $class->description }}
-        </div>
-
-        @if ($class->type === 'daring')
-            <div class="mb-2">
-                <strong>Video Pembelajaran:</strong> 
-                <a href="{{ $class->video_url }}" target="_blank" class="btn btn-sm btn-outline-primary">Tonton Video</a>
+    <div class="row">
+        
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 mb-4">
+                <h6 class="mb-3">📘 Info Kelas</h6>
+                <p><strong>Kategori:</strong><br> {{ $class->kategori->nama_kategori ?? '-' }}</p>
+                <p><strong>Bidang:</strong><br> {{ ucfirst($class->field) }}</p>
+                <p><strong>Tingkat:</strong><br> {{ ucfirst($class->level) }}</p>
+                <p><strong>Jenis:</strong><br> {{ ucfirst($class->type) }}</p>
+                @if ($class->type === 'luring')
+                    <p><strong>Jadwal Luring:</strong><br>{{ $class->schedule_info }}</p>
+                @endif
             </div>
-        @else
-            <div class="mb-2">
-                <strong>Jadwal Kelas Luring:</strong> {{ $class->schedule_info }}
-            </div>
-        @endif
+        </div>
 
-        @if($class->material_pdf)
-            <div class="mb-2">
-                <strong>Materi PDF:</strong><br>
-                <embed src="{{ asset('storage/' . $class->material_pdf) }}" type="application/pdf" width="100%" height="600px" />
-                <a href="{{ asset('storage/' . $class->material_pdf) }}" target="_blank" class="btn btn-sm btn-outline-success mt-2">Download Materi</a>
+        
+        <div class="col-md-8">
+            <div class="card shadow-sm p-4 mb-4">
+                <h5 class="mb-3">📝 Deskripsi Kelas</h5>
+                <p>{{ $class->description }}</p>
             </div>
-        @endif
+
+            @if ($class->type === 'daring')
+                <div class="card shadow-sm p-3 mb-3">
+                    <h6 class="mb-2">🎥 Video Pembelajaran</h6>
+                    <a href="{{ $class->video_url }}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">Tonton Video</a>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input checklist" type="checkbox" value="" id="videoWatched">
+                        <label class="form-check-label" for="videoWatched">
+                            Saya sudah menonton video
+                        </label>
+                    </div>
+                </div>
+            @endif
+
+            @if($class->material_pdf)
+                <div class="card shadow-sm p-3 mb-3">
+                    <h6 class="mb-2">📄 Materi PDF</h6>
+                    <a href="{{ asset('storage/' . $class->material_pdf) }}" target="_blank" class="btn btn-sm btn-outline-success mb-2">Lihat / Download Materi</a>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input checklist" type="checkbox" value="" id="materialRead">
+                        <label class="form-check-label" for="materialRead">
+                            Saya sudah membaca materi
+                        </label>
+                    </div>
+                </div>
+            @endif
+
+           
+            <div id="quizBtnWrapper" class="d-none">
+                <a href="{{ route('classes.final_quiz', $class->kategori_umkm_id) }}" id="quizBtn" class="btn btn-success text-white w-100 mt-3">
+                    🚀 Ikuti Kuis Akhir
+                </a>
+            </div>
+        </div>
     </div>
-
-    <a href="{{ route('classes.final_quiz', $class->kategori_umkm_id) }}" class="btn btn-warning text-white mt-3">Ikuti Kuis Akhir</a>
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const videoCheckbox = document.getElementById('videoWatched');
+        const materialCheckbox = document.getElementById('materialRead');
+        const quizBtnWrapper = document.getElementById('quizBtnWrapper');
+
+        if (videoCheckbox) videoCheckbox.checked = localStorage.getItem('videoWatched') === 'true';
+        if (materialCheckbox) materialCheckbox.checked = localStorage.getItem('materialRead') === 'true';
+
+        function toggleQuizButton() {
+            const videoReady = videoCheckbox ? videoCheckbox.checked : true;
+            const materialReady = materialCheckbox ? materialCheckbox.checked : true;
+
+            if (videoReady && materialReady) {
+                quizBtnWrapper.classList.remove('d-none');
+            } else {
+                quizBtnWrapper.classList.add('d-none');
+            }
+        }
+
+        toggleQuizButton();
+
+        if (videoCheckbox) {
+            videoCheckbox.addEventListener('change', () => {
+                localStorage.setItem('videoWatched', videoCheckbox.checked);
+                toggleQuizButton();
+            });
+        }
+
+        if (materialCheckbox) {
+            materialCheckbox.addEventListener('change', () => {
+                localStorage.setItem('materialRead', materialCheckbox.checked);
+                toggleQuizButton();
+            });
+        }
+    });
+</script>
 @endsection

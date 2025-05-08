@@ -61,6 +61,7 @@ class ClassController extends Controller
     public function show($id)
     {
         $class = ClassModel::with('kategori')->findOrFail($id);
+
         return view('classes.show', compact('class'));
     }
 
@@ -115,7 +116,7 @@ class ClassController extends Controller
         return redirect()->route('classes.index')->with('success', 'Kelas berhasil dihapus!');
     }
 
-    // Optional: jika ingin tetap menampilkan filter dan sertifikat
+    
     public function listClasses(Request $request)
     {
         $query = ClassModel::query();

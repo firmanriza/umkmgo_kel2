@@ -2,10 +2,9 @@
 
 @section('content')
 
-<!-- Card untuk Formulir -->
 <div class="card" style="background-color: white; color: black; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.1);">
     <div class="card-header" style="background-color: #F97316; color: white; border-radius: 12px 12px 0 0;">
-        <h4 class="mb-0">Buat Artikel Baru</h4> <!-- Menambahkan color putih di sini -->
+        <h4 class="mb-0">Buat Artikel Baru</h4>
     </div>
     <div class="card-body">
         <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data">
