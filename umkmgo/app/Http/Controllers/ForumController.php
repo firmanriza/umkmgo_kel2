@@ -37,32 +37,38 @@ class ForumController extends Controller
 
     public function show(Forum $forum)
     {
+        $forum->load(['comments.user']); // untuk komentar
         return view('forum.show', compact('forum'));
     }
 
     public function edit(Forum $forum)
-    {
-        $this->authorize('update', $forum);
-        return view('forum.edit', compact('forum'));
-    }
+{
+    $this->authorize('update', $forum);
+    return view('forum.edit', compact('forum'));
+}
 
-    public function update(Request $request, Forum $forum)
-    {
-        $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-        ]);
+public function update(Request $request, Forum $forum)
+{
+    $this->authorize('update', $forum);
 
-        $forum->update($request->only('title', 'content'));
+    $request->validate([
+        'title' => 'required',
+        'content' => 'required',
+    ]);
 
-        return redirect()->route('forum.index')->with('success', 'Diskusi diperbarui');
-    }
+    $forum->update([
+        'title' => $request->title,
+        'content' => $request->content,
+    ]);
 
-    public function destroy(Forum $forum)
-    {
-        $this->authorize('delete', $forum);
-        $forum->delete();
+    return redirect()->route('forum.index')->with('success', 'Diskusi berhasil diperbarui');
+}
 
-        return redirect()->route('forum.index')->with('success', 'Diskusi dihapus');
-    }
+public function destroy(Forum $forum)
+{
+    $this->authorize('delete', $forum);
+    $forum->delete();
+
+    return redirect()->route('forum.index')->with('success', 'Diskusi berhasil dihapus');
+}
 }

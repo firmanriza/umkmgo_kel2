@@ -1,30 +1,55 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Edit Diskusi</h1>
+<style>
+    .custom-header {
+        background: linear-gradient(135deg, #F9A826, #F97316);
+        color: white;
+        padding: 30px 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+    }
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-    
-    <form action="{{ route('forum.update', $forum->id) }}" method="POST">
+    .custom-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .custom-button {
+        background-color: #F97316;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+    .custom-button:hover {
+        background-color: #ea6512;
+    }
+</style>
+
+<div class="container">
+    <div class="custom-header">
+        <h2 class="mb-0">Edit Diskusi</h2>
+        <p class="mb-0">Perbarui informasi diskusi UMKM yang sudah kamu buat</p>
+    </div>
+
+    <form method="POST" action="{{ route('forum.update', $forum->id) }}">
         @csrf
         @method('PUT')
+
         <div class="mb-3">
-            <label for="title" class="form-label">Judul</label>
-            <input type="text" class="form-control" name="title" id="title" value="{{ $forum->title }}" required>
+            <label for="title" class="form-label custom-label">Judul</label>
+            <input type="text" name="title" class="form-control rounded-3" value="{{ $forum->title }}" required>
         </div>
+
         <div class="mb-3">
-            <label for="content" class="form-label">Isi Diskusi</label>
-            <textarea class="form-control" name="content" id="content" rows="5" required>{{ $forum->content }}</textarea>
+            <label for="content" class="form-label custom-label">Isi Diskusi</label>
+            <textarea name="content" class="form-control rounded-3" rows="5" required>{{ $forum->content }}</textarea>
         </div>
-        <button type="submit" class="btn btn-orange">Update</button>
-        <a href="{{ route('forum.index') }}" class="btn btn-secondary">Batal</a>
+
+        <button type="submit" class="custom-button">Perbarui</button>
     </form>
+</div>
 @endsection

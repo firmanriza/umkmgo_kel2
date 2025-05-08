@@ -1,29 +1,53 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>Buat Diskusi Baru</h1>
+<style>
+    .custom-header {
+        background: linear-gradient(135deg, #F9A826, #F97316);
+        color: white;
+        padding: 30px 20px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+    }
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul class="mb-0">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    .custom-label {
+        font-weight: 600;
+        color: #333;
+    }
 
-    <form action="{{ route('forum.store') }}" method="POST">
+    .custom-button {
+        background-color: #F97316;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+    .custom-button:hover {
+        background-color: #ea6512;
+    }
+</style>
+
+<div class="container">
+    <div class="custom-header">
+        <h2 class="mb-0">Buat Diskusi Baru</h2>
+        <p class="mb-0">Sampaikan pertanyaan, ide, atau pengalamanmu kepada komunitas UMKMGO</p>
+    </div>
+
+    <form method="POST" action="{{ route('forum.store') }}">
         @csrf
         <div class="mb-3">
-            <label for="title" class="form-label">Judul</label>
-            <input type="text" class="form-control" name="title" id="title" required>
+            <label for="title" class="form-label custom-label">Judul</label>
+            <input type="text" name="title" class="form-control rounded-3" required>
         </div>
+
         <div class="mb-3">
-            <label for="content" class="form-label">Isi Diskusi</label>
-            <textarea class="form-control" name="content" id="content" rows="5" required></textarea>
+            <label for="content" class="form-label custom-label">Isi Diskusi</label>
+            <textarea name="content" class="form-control rounded-3" rows="5" required></textarea>
         </div>
-        <button type="submit" class="btn btn-orange">Kirim</button>
-        <a href="{{ route('forum.index') }}" class="btn btn-secondary">Kembali</a>
+
+        <button type="submit" class="custom-button">Kirim Diskusi</button>
     </form>
+</div>
 @endsection
