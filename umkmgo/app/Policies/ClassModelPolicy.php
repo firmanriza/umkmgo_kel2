@@ -28,7 +28,7 @@ class ClassModelPolicy
 
     public function update(User $user, ClassModel $class)
     {
-        return $user->role === 'admin';
+        return in_array($user->role, ['admin', 'mentor']);
     }
 
 
