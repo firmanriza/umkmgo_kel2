@@ -8,7 +8,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\ProfileController;
+
 
 
 
@@ -23,10 +23,6 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-    // Profile UMKM routes
-    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
     // Forum Diskusi
     Route::resource('forum', ForumController::class)->except(['destroy']);

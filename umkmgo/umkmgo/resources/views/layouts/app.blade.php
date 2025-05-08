@@ -24,7 +24,7 @@
 
 
     .navbar {
-        background-color: #0d6efd;
+        background-color: #0d6efd; 
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
         min-height: 60px;
         padding-top: 0;
@@ -175,14 +175,8 @@
 
                     <!-- <a class="nav-link {{ request()->routeIs('articles.*') ? 'active' : '' }}" href="{{ route('articles.index') }}">Artikel</a>
                     <li class="nav-item"><a class="nav-link" href="{{ route('forum.index') }}">Forum</a></li> -->
-                    
                     <li class="nav-item ms-auto d-flex align-items-center">
                     <span class="ms-2 text-black">Halo, {{ auth()->user()->name }}</span></li>
-                    @auth
-                    @if(auth()->user()->role === 'user')
-                    <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit') }}">Profile UMKM</a></li>
-                    @endif
-                    @endauth
                     <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
                 @endguest
