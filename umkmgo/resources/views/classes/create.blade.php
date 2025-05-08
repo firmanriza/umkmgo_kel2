@@ -1,10 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-
+<div class="container py-4">
+    <h2 class="mb-4 text-white">{{ isset($class) ? 'Edit Kelas' : 'Tambah Kelas' }}</h2>
 
     <div class="card p-3" style="background-color: #757575;">
-        <form action="{{ isset($class) ? route('classes.update', $class->id) : route('classes.store') }}" method="POST">
+        <form action="{{ isset($class) ? route('classes.update', $class->id) : route('classes.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @if (isset($class))
                 @method('PUT')
@@ -20,10 +21,12 @@
                 <div class="col-md-6">
                     <div class="card p-3 mb-3" style="background-color: #0d6efd;">
                         <label for="kategori_umkm_id" class="form-label text-white">Kategori UMKM</label>
-                        <select name="kategori_umkm_id" id="kategori_umkm_id" class="form-select" required>
+                        <select name="kategori_umkm_id" class="form-select" required>
                             <option value="">-- Pilih Kategori --</option>
                             @foreach($kategoris as $kategori)
-                                <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+                                <option value="{{ $kategori->id }}" {{ (isset($class) && $class->kategori_umkm_id == $kategori->id) ? 'selected' : '' }}>
+                                    {{ $kategori->nama_kategori }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -87,8 +90,18 @@
                 <label for="description" class="form-label text-white">Deskripsi</label>
                 <textarea name="description" class="form-control">{{ old('description', $class->description ?? '') }}</textarea>
             </div>
+
+            @if(auth()->user() && auth()->user()->role === 'admin')
+                <div class="card p-3 mb-3" style="background-color: #0d6efd;">
+                    <label for="material_pdf" class="form-label text-white">Upload Materi PDF</label>
+                    <input type="file" name="material_pdf" id="material_pdf" class="form-control" accept="application/pdf">
+                </div>
+            @endif
+
+            <div class="text-end">
+                <button type="submit" class="custom-button mt-3">Simpan</button>
+            </div>
         </form>
-        <button type="submit" class="custom-button mt-3">Simpan</button>
     </div>
 </div>
 @endsection

@@ -1,25 +1,37 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center py-12 px-4 bg-blue-100">
-    <div class="bg-white rounded-xl shadow-lg p-8 max-w-3xl w-full">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">
-            {{ $article->title }}
-        </h1>
+<div class="container">
+    
 
-        @if ($article->image)
-            <img src="{{ asset('storage/' . $article->image) }}" class="rounded-lg mb-6 w-full" alt="Gambar Artikel">
-        @endif
 
-        <div class="text-gray-700 leading-relaxed">
-            {!! nl2br(e($article->content)) !!}
+    <div class="card mb-4" style="background-color: white; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.1);">
+        <div class="card-body">
+            <h3 class="card-title">{{ $article->title }}</h3>
+
+            @if ($article->image)
+                <div class="mb-3">
+                    <img src="{{ asset('storage/' . $article->image) }}" class="img-fluid rounded" alt="Gambar Artikel">
+                </div>
+            @endif
         </div>
+    </div>
 
-        <div class="mt-8">
-            <a href="{{ route('articles.index') }}" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+
+    <div class="card" style="background-color: white; border-radius: 12px; box-shadow: 0 0 6px rgba(0,0,0,0.1);">
+        <div class="card-body">
+            <div class="text-gray-700 leading-relaxed">
+                {!! nl2br(e($article->content)) !!}
+            </div>
+        </div>
+    </div>
+
+    <div class="text-end mt-4">
+        <a href="{{ route('articles.index') }}">
+            <button class="custom-button px-6 py-2 rounded-lg">
                 Kembali ke Daftar Artikel
-            </a>
-        </div>
+            </button>
+        </a>
     </div>
 </div>
 @endsection

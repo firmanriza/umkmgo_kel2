@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="container py-4">
-    <h2 class="text-white mb-4"><b>{{ $class->title }}</b></h2>
+<h2 class="text-white mb-4"><b>{{ $class->title }}</b></h2>
 
     <div class="row">
-        <!-- Kiri: Info Detail Kelas (kecil) -->
+        
         <div class="col-md-4">
             <div class="card shadow-sm p-3 mb-4">
                 <h6 class="mb-3">📘 Info Kelas</h6>
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <!-- Kanan: Video & Materi -->
+        
         <div class="col-md-8">
             <div class="card shadow-sm p-4 mb-4">
                 <h5 class="mb-3">📝 Deskripsi Kelas</h5>
@@ -33,7 +33,7 @@
                     <div class="form-check mt-2">
                         <input class="form-check-input checklist" type="checkbox" value="" id="videoWatched">
                         <label class="form-check-label" for="videoWatched">
-                            ✅ Saya sudah menonton video
+                            Saya sudah menonton video
                         </label>
                     </div>
                 </div>
@@ -46,27 +46,23 @@
                     <div class="form-check mt-2">
                         <input class="form-check-input checklist" type="checkbox" value="" id="materialRead">
                         <label class="form-check-label" for="materialRead">
-                            ✅ Saya sudah membaca materi
+                            Saya sudah membaca materi
                         </label>
                     </div>
                 </div>
             @endif
 
-            <!-- Tombol kuis akhir -->
+           
             <div id="quizBtnWrapper" class="d-none">
-    <a href="{{ route('classes.final_quiz', $class->kategori_umkm_id) }}"
-       id="quizBtn"
-       class="btn text-white w-100 mt-3"
-       style="background-color: #FF6B00;">
-        🚀 Ikuti Kuis Akhir
-    </a>
-</div>
-
+                <a href="{{ route('classes.final_quiz', $class->kategori_umkm_id) }}" id="quizBtn" class="btn btn-success text-white w-100 mt-3">
+                    🚀 Ikuti Kuis Akhir
+                </a>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- Script Checklist -->
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const videoCheckbox = document.getElementById('videoWatched');

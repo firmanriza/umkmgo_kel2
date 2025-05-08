@@ -9,13 +9,8 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\AdminController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
 
-// Arahkan root '/' ke login jika belum login, ke dashboard jika sudah login
+
 
 Route::get('/', function () {
     return redirect()->route(auth()->check() ? 'home' : 'login');
@@ -54,19 +49,41 @@ Route::middleware('auth')->group(function () {
         Route::get('/{id}/summary', [QuizController::class, 'finalSummary'])->name('quiz.final_summary');
         Route::post('/{id}/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save_answer');
         Route::post('/{id}/submit', [QuizController::class, 'finalSubmit'])->name('quiz.final_submit');
+        
     });
+    // Classes routes
+    // Route::prefix('classes')->group(function () {
+    //     Route::get('/', [\App\Http\Controllers\ClassController::class, 'index'])->name('classes.index');
+    //     Route::get('/list', [\App\Http\Controllers\ClassController::class, 'listClasses'])->name('classes.list');
+    //     Route::get('/{id}', [\App\Http\Controllers\ClassController::class, 'show'])->name('classes.show');
+    //     Route::get('/{kategori_umkm_id}/final-quiz', [\App\Http\Controllers\ClassController::class, 'finalQuiz'])->name('classes.final_quiz');
+    //     Route::get('/certificate/{id}', [\App\Http\Controllers\ClassController::class, 'certificate'])->name('classes.certificate');
+
+    //     // Admin-only CRUD routes for classes
+    //     Route::middleware('admin')->group(function () {
+    //         Route::get('/create', [\App\Http\Controllers\ClassController::class, 'create'])->name('classes.create');
+    //         Route::post('/', [\App\Http\Controllers\ClassController::class, 'store'])->name('classes.store');
+    //         Route::get('/{id}/edit', [\App\Http\Controllers\ClassController::class, 'edit'])->name('classes.edit');
+    //         Route::put('/{id}', [\App\Http\Controllers\ClassController::class, 'update'])->name('classes.update');
+    //         Route::delete('/{id}', [\App\Http\Controllers\ClassController::class, 'destroy'])->name('classes.destroy');
+    //     });
+    // });
     
+    // Route resource untuk semua authenticated user (kecuali destroy)
     Route::resource('classes', \App\Http\Controllers\ClassController::class)->except(['destroy']);
 
     // Route khusus untuk delete class oleh admin
-    Route::delete('/classes/{class}', [\App\Http\Controllers\ClassController::class, 'destroy'])
-        ->middleware('admin')
-        ->name('classes.destroy');
+    // Route::delete('/classes/{class}', [\App\Http\Controllers\ClassController::class, 'destroy'])
+    //     ->middleware('admin')
+    //     ->name('classes.destroy');
+
+    Route::delete('/classes/{class}', [\App\Http\Controllers\ClassController::class, 'destroy'])->name('classes.destroy');
 
     // Route tambahan khusus class (jika tidak termasuk dalam resource)
     Route::get('/list', [\App\Http\Controllers\ClassController::class, 'listClasses'])->name('classes.list');
     Route::get('/classes/{kategori_umkm_id}/final-quiz', [\App\Http\Controllers\ClassController::class, 'finalQuiz'])->name('classes.final_quiz');
     Route::get('/classes/certificate/{id}', [\App\Http\Controllers\ClassController::class, 'certificate'])->name('classes.certificate');
+    
 
     
     // Article routes accessible to all authenticated users except destroy
@@ -78,12 +95,11 @@ Route::middleware('auth')->group(function () {
 
     // Admin user management and other admin features
 
-    Route::prefix('admin')->middleware('auth', 'admin')->group(function () {
-        Route::get('users', [AdminController::class, 'index'])->name('admin.users.index');
-        Route::post('users/{user}/role', [AdminController::class, 'updateRole'])->name('admin.users.updateRole');
+    Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+        Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
+        Route::post('/users/{user}/update-role', [AdminController::class, 'updateRole'])->name('admin.users.updateRole');
     });
         // Admin certificate assignment routes
         Route::get('/certificates/assign', [AdminController::class, 'assignCertificateForm'])->name('admin.certificates.assign');
         Route::post('/certificates', [AdminController::class, 'storeCertificate'])->name('admin.certificates.store');
     });
-

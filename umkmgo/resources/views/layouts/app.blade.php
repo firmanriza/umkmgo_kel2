@@ -34,9 +34,9 @@
     }
 
     .navbar-brand img {
-        height: 70px; /* Ukuran besar logo */
+        height: 70px; 
         object-fit: contain;
-        margin-top: -10px;  /* Mengimbangi jika logo terlalu tinggi */
+        margin-top: -10px;  
         margin-bottom: -10px;
     }
 
@@ -111,7 +111,7 @@
 
 
     .nav-tabs .nav-link.active {
-        background-color: #fd7e14 !important; /* Warna orange */
+        background-color: #fd7e14 !important; 
         color: white !important;
         border-color: #fd7e14 #fd7e14 #fff !important;
     }
@@ -173,10 +173,10 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
                 @else
 
-                    <a class="nav-link {{ request()->routeIs('articles.*') ? 'active' : '' }}" href="{{ route('articles.index') }}">Artikel</a>
-
-
-                    <li class="nav-item"><a class="nav-link" href="{{ route('forum.index') }}">Forum</a></li>
+                    <!-- <a class="nav-link {{ request()->routeIs('articles.*') ? 'active' : '' }}" href="{{ route('articles.index') }}">Artikel</a>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('forum.index') }}">Forum</a></li> -->
+                    <li class="nav-item ms-auto d-flex align-items-center">
+                    <span class="ms-2 text-black">Halo, {{ auth()->user()->name }}</span></li>
                     <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
                 @endguest

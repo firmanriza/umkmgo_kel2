@@ -13,12 +13,11 @@
 @endpush
 
 <div class="container mx-auto px-4">
-    <h2 class="text-2xl text-white font-bold text-center mb-6">
+    <h2 class="text-2xl text-white font-bold text-center mb-10 mt-5"style="font-family: 'Plus Jakarta Sans', sans-serif;"><b>
         Pilih Kategori
-        <span class="fw-bold px-2 py-1" style="background-color: #FF6B00; border-radius: 20px;">
+      
             UMKM
-        </span>
-    </h2>
+    </b> </h2>
 
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @foreach($kategoris as $kategori)

@@ -17,6 +17,7 @@ class ClassModel extends Model
         'description',
         'video_url',
         'schedule_info',
+        'material_pdf',
     ];
 
     public function kategori()

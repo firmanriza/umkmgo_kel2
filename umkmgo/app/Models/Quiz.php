@@ -9,7 +9,7 @@ class Quiz extends Model
     // Relasi ke model kategori (kategori_umkm)    use HasFactory;
 
     protected $fillable = [
-        'judul',
+        'nama_quiz',
         'kategori_id',
     ];
 
