@@ -8,7 +8,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\CertificateController;
 
 
 
@@ -41,16 +41,27 @@ Route::middleware('auth')->group(function () {
     Route::get('/quiz/{id}/attempt', [QuizController::class, 'attempt'])->name('quiz.attempt');
     Route::post('/kuis/hasil', [QuizController::class, 'result'])->name('quiz.result');
 
-    // Final Quiz Routes with Summary and Answer Saving
+
     Route::prefix('quiz/final')->group(function () {
+        // Menampilkan halaman pengantar quiz akhir
         Route::get('/', [QuizController::class, 'finalQuiz'])->name('quiz.final');
+    
+        // Menampilkan halaman pengantar untuk setiap kategori quiz akhir
         Route::get('/{id}', [QuizController::class, 'finalIntro'])->name('quiz.final_intro');
-        Route::get('/{id}/attempt', [QuizController::class, 'finalAttempt'])->name('quiz.final_attempt');
-        Route::get('/{id}/summary', [QuizController::class, 'finalSummary'])->name('quiz.final_summary');
+    
+        // Menampilkan halaman kuis akhir dan mengarahkan ke tampilan kuis
+        Route::get('/{id}/attempt', [QuizController::class, 'finalAttempt'])->name('quiz.final_attempt');   
+    
+        // Menyimpan jawaban dari quiz akhir
         Route::post('/{id}/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save_answer');
-        Route::post('/{id}/submit', [QuizController::class, 'finalSubmit'])->name('quiz.final_submit');
-        
+    
+        // Mengirim hasil akhir kuis dan menampilkan hasil ke final_result.blade.php
+        Route::post('/quiz/{id}/final_submit', [QuizController::class, 'finalSubmit'])->name('quiz.final_submit');
+    
+        // Menampilkan hasil akhir kuis setelah submit
+        Route::get('/quiz/{id}/final_result', [QuizController::class, 'finalResult'])->name('quiz.final_result');
     });
+    
     // Classes routes
     // Route::prefix('classes')->group(function () {
     //     Route::get('/', [\App\Http\Controllers\ClassController::class, 'index'])->name('classes.index');
@@ -84,7 +95,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/classes/{kategori_umkm_id}/final-quiz', [\App\Http\Controllers\ClassController::class, 'finalQuiz'])->name('classes.final_quiz');
     Route::get('/classes/certificate/{id}', [\App\Http\Controllers\ClassController::class, 'certificate'])->name('classes.certificate');
     
-
+    
     
     // Article routes accessible to all authenticated users except destroy
     Route::resource('articles', ArticleController::class)->except(['destroy']);
@@ -102,4 +113,10 @@ Route::middleware('auth')->group(function () {
         // Admin certificate assignment routes
         Route::get('/certificates/assign', [AdminController::class, 'assignCertificateForm'])->name('admin.certificates.assign');
         Route::post('/certificates', [AdminController::class, 'storeCertificate'])->name('admin.certificates.store');
+    });
+
+    Route::controller(CertificateController::class)->group(function(){
+        Route::get('/certif','index');
+        Route::get('/view-certificate','viewCertificate')->name('viewCertificate');
+        Route::get('/download-certificate','downloadCertificate')->name('downloadCertificate');
     });
