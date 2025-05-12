@@ -110,7 +110,7 @@ class FinalQuizSeeder extends Seeder
             $kategori = KategoriUmkm::firstOrCreate(['nama_kategori' => $kategoriNama]);
 
             $quiz = Quiz::create([
-                'nama_quiz' => 'Final Kuis Akhir UMKM ' . $kategoriNama,
+                'nama_quiz' => 'Kuis Akhir UMKM ' . $kategoriNama,
                 'kategori_id' => $kategori->id
             ]);
 

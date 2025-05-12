@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
-    <div class="breadcrumb text-sm text-gray-600 mb-6" aria-label="Breadcrumb">
+    <div class="breadcrumb text-sm text-gray-600 mb-6">
         {{ $quiz->kategori->nama_kategori }} / {{ $quiz->nama_quiz }} / Latihan Soal
     </div>
 
     <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
         <h1 class="text-2xl font-bold mb-4">Summary of your previous attempts</h1>
-        <table class="w-full" role="table">
+        <table class="w-full">
             <thead>
                 <tr>
                     <th class="text-left py-2">Attempt</th>
@@ -34,7 +34,7 @@
 
     <div class="bg-white rounded-lg shadow-sm p-6">
         <h2 class="text-lg font-semibold mb-4">Questions</h2>
-        <form id="quizForm" action="{{ route('quiz.final_submit', $quiz->id) }}" method="POST" aria-label="Form kuis akhir">
+        <form id="quizForm" action="{{ route('quiz.final_submit', $quiz->id) }}" method="POST">
             @csrf
             
             @foreach($quiz->soals as $index => $soal)
@@ -42,19 +42,19 @@
                     <p class="font-semibold">{{ $index + 1 }}. {{ $soal->pertanyaan }}</p>
                     <div class="space-y-2">
                         <label class="flex items-center">
-                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="A" class="mr-2" aria-label="Pilihan A: {{ $soal->pilihan_a }}">
+                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="A" class="mr-2">
                             {{ $soal->pilihan_a }}
                         </label>
                         <label class="flex items-center">
-                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="B" class="mr-2" aria-label="Pilihan B: {{ $soal->pilihan_b }}">
+                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="B" class="mr-2">
                             {{ $soal->pilihan_b }}
                         </label>
                         <label class="flex items-center">
-                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="C" class="mr-2" aria-label="Pilihan C: {{ $soal->pilihan_c }}">
+                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="C" class="mr-2">
                             {{ $soal->pilihan_c }}
                         </label>
                         <label class="flex items-center">
-                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="D" class="mr-2" aria-label="Pilihan D: {{ $soal->pilihan_d }}">
+                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="D" class="mr-2">
                             {{ $soal->pilihan_d }}
                         </label>
                     </div>
@@ -62,10 +62,10 @@
             @endforeach
 
             <div class="flex justify-between">
-                <button type="button" class="btn-prev text-blue-600" onclick="history.back()" aria-label="Kembali ke halaman sebelumnya">
+                <button type="button" class="btn-prev text-blue-600" onclick="history.back()">
                     ← Kembali
                 </button>
-                <button type="submit" class="btn-submit bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors" aria-label="Selesaikan kuis">
+                <button type="submit" class="btn-submit bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
                     Selesai
                 </button>
             </div>

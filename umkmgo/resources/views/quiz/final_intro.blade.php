@@ -12,12 +12,11 @@
 
     @if($quiz)
         <a href="{{ route('quiz.attempt', $quiz->id) }}"
-           class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition duration-300 shadow-md"
-           aria-label="Mulai Kuis Akhir untuk kategori {{ $kategori->nama_kategori }}">
+           class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition duration-300 shadow-md">
             Mulai Kuis
         </a>
     @else
-        <p class="text-red-200 font-semibold drop-shadow" role="alert">Kuis belum tersedia untuk kategori ini.</p>
+        <p class="text-red-200 font-semibold drop-shadow">Kuis belum tersedia untuk kategori ini.</p>
     @endif
 </div>
 @endsection

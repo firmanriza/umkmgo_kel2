@@ -31,7 +31,7 @@
             <div class="card mb-3 shadow-sm position-relative">
                 <div class="card-body">
                     {{-- Dropdown tombol untuk admin --}}
-                    @if(auth()->user() && auth()->user()->role === 'admin')
+                    @if(auth()->user() && (auth()->user()->role === 'admin' || auth()->user()->role === 'mentor'))
                         <div class="position-absolute top-0 end-0 m-2">
                             <div class="dropdown">
                                 <button class="btn btn-sm dropdown-toggle text-white" style="background-color: #FF6B00;" type="button" id="dropdownMenuDaring{{ $class->id }}" data-bs-toggle="dropdown" aria-expanded="false">
@@ -70,7 +70,7 @@
             <div class="card mb-3 shadow-sm position-relative">
                 <div class="card-body">
                     {{-- Dropdown tombol untuk admin --}}
-                    @if(auth()->user() && auth()->user()->role === 'admin')
+                    @if(auth()->user() && (auth()->user()->role === 'admin' || auth()->user()->role === 'mentor'))
                         <div class="position-absolute top-0 end-0 m-2">
                             <div class="dropdown">
                                 <button class="btn btn-sm dropdown-toggle text-white" style="background-color: #FF6B00;" type="button" id="dropdownMenuLuring{{ $class->id }}" data-bs-toggle="dropdown" aria-expanded="false">

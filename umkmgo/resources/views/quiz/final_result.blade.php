@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
-    <div class="breadcrumb text-sm text-gray-600 mb-6" aria-label="Breadcrumb">
+    <div class="breadcrumb text-sm text-gray-600 mb-6">
         {{ $quiz->kategori->nama_kategori }} / {{ $quiz->nama_quiz }} / Hasil Kuis
     </div>
 
     <div class="bg-white rounded-lg shadow-sm p-6">
         <div class="flex items-center gap-3 mb-6">
-            <div class="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center" aria-hidden="true">
+            <div class="w-8 h-8 bg-pink-500 rounded-lg flex items-center justify-center">
                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
@@ -48,7 +48,7 @@
                 @foreach($quiz->soals as $index => $soal)
                     <div class="p-4 rounded-lg {{ $userAnswers[$soal->id] === $correctAnswers[$soal->id] ? 'bg-green-50' : 'bg-red-50' }}">
                         <div class="flex items-start gap-3">
-                            <div class="w-6 h-6 mt-1 rounded-full flex items-center justify-center {{ $userAnswers[$soal->id] === $correctAnswers[$soal->id] ? 'bg-green-500' : 'bg-red-500' }}" aria-hidden="true">
+                            <div class="w-6 h-6 mt-1 rounded-full flex items-center justify-center {{ $userAnswers[$soal->id] === $correctAnswers[$soal->id] ? 'bg-green-500' : 'bg-red-500' }}">
                                 @if($userAnswers[$soal->id] === $correctAnswers[$soal->id])
                                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -75,7 +75,7 @@
                                 </div>
 
                                 @if($userAnswers[$soal->id] !== $correctAnswers[$soal->id])
-                                    <div class="mt-3 text-red-600" aria-label="Jawaban Anda">
+                                    <div class="mt-3 text-red-600">
                                         Jawaban Anda: {{ $userAnswers[$soal->id] }}
                                     </div>
                                 @endif
@@ -87,10 +87,10 @@
         </div>
 
         <div class="flex justify-between">
-            <a href="{{ route('quiz.final') }}" class="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors" aria-label="Kembali ke Daftar Kuis">
+            <a href="{{ route('quiz.final') }}" class="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
                 Kembali ke Daftar Kuis
             </a>
-            <a href="{{ route('quiz.final_attempt', $quiz->id) }}" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" aria-label="Coba Lagi">
+            <a href="{{ route('quiz.final_attempt', $quiz->id) }}" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                 Coba Lagi
             </a>
         </div>
@@ -100,4 +100,3 @@
 @push('scripts')
 <script src="https://cdn.tailwindcss.com"></script>
 @endpush
-@endsection

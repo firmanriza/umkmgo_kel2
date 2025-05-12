@@ -77,7 +77,7 @@
                 <textarea name="schedule_info" id="schedule_info" class="form-control" rows="3">{{ old('schedule_info', $class->schedule_info) }}</textarea>
             </div>
 
-            @if(auth()->user() && auth()->user()->role === 'admin')
+            @if(auth()->user() && in_array(auth()->user()->role, ['mentor']))
                 <div class="mb-3">
                     <label for="material_pdf" class="form-label">Upload Materi PDF</label>
                     <input type="file" name="material_pdf" id="material_pdf" class="form-control" accept="application/pdf">

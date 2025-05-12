@@ -26,7 +26,7 @@
                 <p>{{ $class->description }}</p>
             </div>
 
-            @if($class->type === 'daring')
+            @if ($class->type === 'daring')
                 <div class="card shadow-sm p-3 mb-3">
                     <h6 class="mb-2">🎥 Video Pembelajaran</h6>
                     <a href="{{ $class->video_url }}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">Tonton Video</a>
@@ -53,7 +53,7 @@
             @endif
 
            
-            <div id="quizBtnWrapper" class="{{ ($class->type !== 'daring' && !$class->material_pdf) ? '' : 'd-none' }}">
+            <div id="quizBtnWrapper" class="d-none">
                 <a href="{{ route('classes.final_quiz', $class->kategori_umkm_id) }}" id="quizBtn" class="btn btn-success text-white w-100 mt-3">
                     🚀 Ikuti Kuis Akhir
                 </a>
