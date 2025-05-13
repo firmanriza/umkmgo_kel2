@@ -2,13 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ForumController;
+use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\QuizController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\ProfileController;
 
 
 
@@ -23,6 +24,10 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+    // Profile UMKM routes
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 
     // Forum Diskusi
     Route::resource('forum', ForumController::class)->except(['destroy']);
@@ -41,61 +46,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/quiz/{id}/attempt', [QuizController::class, 'attempt'])->name('quiz.attempt');
     Route::post('/kuis/hasil', [QuizController::class, 'result'])->name('quiz.result');
 
+    
+    Route::get('/quiz/final', [QuizController::class, 'finalQuiz'])->name('quiz.final');
+    Route::post('/quiz/final/{id}/submit', [QuizController::class, 'finalSubmit'])->name('quiz.final_submit');
+    Route::get('/quiz/final/{id}', [QuizController::class, 'finalShow'])->name('quiz.final_show');
+    Route::post('/quiz/final/{id}/result', [QuizController::class, 'finalResult'])->name('quiz.final_result');
+    Route::get('quiz/final/{id}/attempt', [QuizController::class, 'finalAttempt'])->name('quiz.final_attempt');
 
-    Route::prefix('quiz/final')->group(function () {
-        // Menampilkan halaman pengantar quiz akhir
-        Route::get('/', [QuizController::class, 'finalQuiz'])->name('quiz.final');
-    
-        // Menampilkan halaman pengantar untuk setiap kategori quiz akhir
-        Route::get('/{id}', [QuizController::class, 'finalIntro'])->name('quiz.final_intro');
-    
-        // Menampilkan halaman kuis akhir dan mengarahkan ke tampilan kuis
-        Route::get('/{id}/attempt', [QuizController::class, 'finalAttempt'])->name('quiz.final_attempt');   
-    
-        // Menyimpan jawaban dari quiz akhir
-        Route::post('/{id}/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save_answer');
-    
-        // Mengirim hasil akhir kuis dan menampilkan hasil ke final_result.blade.php
-        Route::post('/quiz/{id}/final_submit', [QuizController::class, 'finalSubmit'])->name('quiz.final_submit');
-    
-        // Menampilkan hasil akhir kuis setelah submit
-        Route::get('/quiz/{id}/final_result', [QuizController::class, 'finalResult'])->name('quiz.final_result');
-    });
-    
-    // Classes routes
-    // Route::prefix('classes')->group(function () {
-    //     Route::get('/', [\App\Http\Controllers\ClassController::class, 'index'])->name('classes.index');
-    //     Route::get('/list', [\App\Http\Controllers\ClassController::class, 'listClasses'])->name('classes.list');
-    //     Route::get('/{id}', [\App\Http\Controllers\ClassController::class, 'show'])->name('classes.show');
-    //     Route::get('/{kategori_umkm_id}/final-quiz', [\App\Http\Controllers\ClassController::class, 'finalQuiz'])->name('classes.final_quiz');
-    //     Route::get('/certificate/{id}', [\App\Http\Controllers\ClassController::class, 'certificate'])->name('classes.certificate');
 
-    //     // Admin-only CRUD routes for classes
-    //     Route::middleware('admin')->group(function () {
-    //         Route::get('/create', [\App\Http\Controllers\ClassController::class, 'create'])->name('classes.create');
-    //         Route::post('/', [\App\Http\Controllers\ClassController::class, 'store'])->name('classes.store');
-    //         Route::get('/{id}/edit', [\App\Http\Controllers\ClassController::class, 'edit'])->name('classes.edit');
-    //         Route::put('/{id}', [\App\Http\Controllers\ClassController::class, 'update'])->name('classes.update');
-    //         Route::delete('/{id}', [\App\Http\Controllers\ClassController::class, 'destroy'])->name('classes.destroy');
-    //     });
-    // });
     
     // Route resource untuk semua authenticated user (kecuali destroy)
     Route::resource('classes', \App\Http\Controllers\ClassController::class)->except(['destroy']);
-
-    // Route khusus untuk delete class oleh admin
-    // Route::delete('/classes/{class}', [\App\Http\Controllers\ClassController::class, 'destroy'])
-    //     ->middleware('admin')
-    //     ->name('classes.destroy');
-
     Route::delete('/classes/{class}', [\App\Http\Controllers\ClassController::class, 'destroy'])->name('classes.destroy');
 
     // Route tambahan khusus class (jika tidak termasuk dalam resource)
     Route::get('/list', [\App\Http\Controllers\ClassController::class, 'listClasses'])->name('classes.list');
-    Route::get('/classes/{kategori_umkm_id}/final-quiz', [\App\Http\Controllers\ClassController::class, 'finalQuiz'])->name('classes.final_quiz');
+    Route::get('/quiz/final/{id}', [QuizController::class, 'finalIntro'])->name('quiz.final_intro');
     Route::get('/classes/certificate/{id}', [\App\Http\Controllers\ClassController::class, 'certificate'])->name('classes.certificate');
     
-    
+
     
     // Article routes accessible to all authenticated users except destroy
     Route::resource('articles', ArticleController::class)->except(['destroy']);
@@ -105,7 +74,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->middleware('admin')->name('articles.destroy');
 
     // Admin user management and other admin features
-
     Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
         Route::post('/users/{user}/update-role', [AdminController::class, 'updateRole'])->name('admin.users.updateRole');

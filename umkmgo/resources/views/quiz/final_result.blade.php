@@ -1,39 +1,70 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <div class="bg-white rounded-lg shadow-sm p-6">
-        <h1 class="text-xl font-semibold mb-6">Hasil Kuis Akhir</h1>
+<style>
+    .quiz-result-card {
+        background-color: #003366;
+        color: white;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
 
-        @foreach ($hasilAkhir as $bidang => $data)
-    <div class="col-md-4 mb-4">
-        <div class="card shadow">
-            <div class="card-body">
-                <h5 class="card-title">{{ $bidang }}</h5>
-                <p class="card-text"><strong>Nilai:</strong> {{ $data['persentase'] }}%</p>
-                {{-- Jika hanya nilai, bagian di bawah ini bisa dihapus --}}
-                {{-- <p class="card-text"><strong>Level:</strong> {{ $data['level'] }}</p>
-                <p class="card-text"><strong>Saran:</strong> {{ $data['saran'] }}</p> --}}
-            </div>
-        </div>
-    </div>
-@endforeach
+    .quiz-result-card:hover {
+        box-shadow: 0 0 20px rgba(0, 123, 255, 0.6);
+        transform: translateY(-5px);
+    }
 
+    .btn-custom-blue {
+        background-color: #003366;
+        color: white;
+        border: none;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
 
-        @if ($recommendedClasses->isNotEmpty())
-            <div class="mt-6">
-                <h3 class="text-lg font-semibold">Kelas yang Direkomendasikan:</h3>
-                <ul class="list-disc pl-5">
-                    @foreach ($recommendedClasses as $class)
-                        <li>{{ $class->name }} - Level: {{ ucfirst($class->level) }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    .btn-custom-blue:hover {
+        box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
+        transform: translateY(-3px);
+    }
 
-        <a href="{{ route('quiz.index', $quiz->kategori->id) }}" class="mt-6 inline-block px-4 py-2 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 transition-colors">
-            Kembali ke Kategori
-        </a>
+    .alert-custom {
+        background-color: #003366;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: inline-block;
+    }
+</style>
+
+<h2 class="mb-4 text-white">Hasil Kuis Akhir</h2>
+
+<div class="card mb-4 quiz-result-card">
+    <div class="card-body text-center">
+        <h3 class="text-xl font-semibold">Skor Anda</h3>
+        <p>Anda mendapatkan skor <strong>{{ $score }}</strong> dari total <strong>{{ $total }}</strong> soal yang dikerjakan.</p>
+        <p class="mt-2">Nilai Akhir Anda: <strong>{{ $nilai }}%</strong></p>
     </div>
 </div>
+
+@if($nilai >= 75)
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <a href="{{ route('home') }}">
+            <button class="btn btn-secondary">Kembali ke Beranda</button>
+        </a>
+        <a href="{{ route('viewCertificate') }}">
+            <button class="btn btn-custom-blue">Lihat Sertifikat</button>
+        </a>
+    </div>
+@else
+    <div class="text-center mt-4">
+        <span class="alert-custom">
+            ⚠️ Nilai Anda belum mencukupi untuk mendapatkan sertifikat. Minimal 75%.
+        </span>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="{{ route('home') }}">
+            <button class="btn btn-secondary">Kembali ke Beranda</button>
+        </a>
+    </div>
+@endif
+
 @endsection
