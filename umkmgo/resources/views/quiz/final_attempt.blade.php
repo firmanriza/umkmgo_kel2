@@ -1,81 +1,84 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
-    <div class="breadcrumb text-sm text-gray-600 mb-6">
-        {{ $quiz->kategori->nama_kategori }} / {{ $quiz->nama_quiz }} / Latihan Soal
-    </div>
+<div class="container py-5">
+    <div class="card shadow-lg p-4">
+        <h1 class="text-center mb-4 text-success fw-bold fs-3">{{ $quiz->nama_quiz }}</h1>
 
-    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-        <h1 class="text-2xl font-bold mb-4">Summary of your previous attempts</h1>
-        <table class="w-full">
-            <thead>
-                <tr>
-                    <th class="text-left py-2">Attempt</th>
-                    <th class="text-left py-2">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($quiz->soals as $index => $soal)
-                    <tr>
-                        <td class="py-3">{{ $index + 1 }}</td>
-                        <td class="py-3 text-blue-600">
-                            @if(isset($answers[$soal->id]))
-                                Answer saved
-                            @else
-                                Not yet answered
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
-    <div class="bg-white rounded-lg shadow-sm p-6">
-        <h2 class="text-lg font-semibold mb-4">Questions</h2>
-        <form id="quizForm" action="{{ route('quiz.final_submit', $quiz->id) }}" method="POST">
+<form action="{{ route('quiz.final_submit', $quiz->kategori_id) }}" method="POST">
             @csrf
-            
-            @foreach($quiz->soals as $index => $soal)
-                <div class="mb-6">
-                    <p class="font-semibold">{{ $index + 1 }}. {{ $soal->pertanyaan }}</p>
-                    <div class="space-y-2">
-                        <label class="flex items-center">
-                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="A" class="mr-2">
-                            {{ $soal->pilihan_a }}
-                        </label>
-                        <label class="flex items-center">
-                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="B" class="mr-2">
-                            {{ $soal->pilihan_b }}
-                        </label>
-                        <label class="flex items-center">
-                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="C" class="mr-2">
-                            {{ $soal->pilihan_c }}
-                        </label>
-                        <label class="flex items-center">
-                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="D" class="mr-2">
-                            {{ $soal->pilihan_d }}
-                        </label>
-                    </div>
-                </div>
-            @endforeach
 
-            <div class="flex justify-between">
-                <button type="button" class="btn-prev text-blue-600" onclick="history.back()">
-                    ← Kembali
-                </button>
-                <button type="submit" class="btn-submit bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                    Selesai
-                </button>
+            <div id="soal-container">
+                @foreach ($quiz->soals as $index => $soal)
+                    <div class="soal-item" style="{{ $index !== 0 ? 'display: none;' : '' }}">
+                        {{-- Bidang Soal --}}
+                        <p class="text-muted mb-2"><strong>Bidang:</strong> {{ $soal->bidang }}</p>
+
+                        {{-- Pertanyaan --}}
+                        <h5 class="mb-3">Soal {{ $index + 1 }}: {{ $soal->pertanyaan }}</h5>
+
+                        {{-- Pilihan Jawaban --}}
+                        <div class="form-check">
+                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="{{ $soal->pilihan_a }}" class="form-check-input" id="a{{ $soal->id }}">
+                            <label class="form-check-label" for="a{{ $soal->id }}">{{ $soal->pilihan_a }}</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="{{ $soal->pilihan_b }}" class="form-check-input" id="b{{ $soal->id }}">
+                            <label class="form-check-label" for="b{{ $soal->id }}">{{ $soal->pilihan_b }}</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="{{ $soal->pilihan_c }}" class="form-check-input" id="c{{ $soal->id }}">
+                            <label class="form-check-label" for="c{{ $soal->id }}">{{ $soal->pilihan_c }}</label>
+                        </div>
+                        <div class="form-check mb-4">
+                            <input type="radio" name="jawaban[{{ $soal->id }}]" value="{{ $soal->pilihan_d }}" class="form-check-input" id="d{{ $soal->id }}">
+                            <label class="form-check-label" for="d{{ $soal->id }}">{{ $soal->pilihan_d }}</label>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="button" class="btn btn-success" id="nextBtn">Selanjutnya</button>
+                <button type="button" class="btn btn-secondary" id="prevBtn">Sebelumnya</button>
+                <button type="submit" class="btn btn-primary d-none" id="submitBtn">Kirim Jawaban</button>
             </div>
         </form>
     </div>
 </div>
 
-<style>
-    body {
-        background-color: #1a73e8;
+<script>
+    const soalItems = document.querySelectorAll('.soal-item');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    let currentSoal = 0;
+
+    function showSoal(index) {
+        soalItems.forEach((item, i) => {
+            item.style.display = (i === index) ? 'block' : 'none';
+        });
+
+        prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
+        nextBtn.style.display = index === soalItems.length - 1 ? 'none' : 'inline-block';
+        submitBtn.classList.toggle('d-none', index !== soalItems.length - 1);
     }
-</style>
+
+    prevBtn.addEventListener('click', () => {
+        if (currentSoal > 0) {
+            currentSoal--;
+            showSoal(currentSoal);
+        }
+    });
+
+    nextBtn.addEventListener('click', () => {
+        if (currentSoal < soalItems.length - 1) {
+            currentSoal++;
+            showSoal(currentSoal);
+        }
+    });
+
+    // initial load
+    showSoal(currentSoal);
+</script>
 @endsection
