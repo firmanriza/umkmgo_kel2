@@ -8,6 +8,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ClassController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserDashboardController;
 
 
 
@@ -103,3 +104,5 @@ Route::middleware('auth')->group(function () {
         Route::get('/certificates/assign', [AdminController::class, 'assignCertificateForm'])->name('admin.certificates.assign');
         Route::post('/certificates', [AdminController::class, 'storeCertificate'])->name('admin.certificates.store');
     });
+
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->middleware('auth')->name('dashboard');

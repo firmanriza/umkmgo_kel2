@@ -15,23 +15,23 @@
     <div class="bg-white d-flex flex-column justify-content-center p-5" style="width: 100vw; max-width: 50vw;">
         <div class="mb-2 text-secondary">LET'S GET YOU STARTED</div>
         <h3 class="fw-semibold mb-4">Create an Account</h3>
-        <form method="POST" action="{{ route('register') }}">
-            @csrf
-            <div class="mb-3">
+            <form method="POST" action="{{ route('register') }}">
+                @csrf
+                <div class="mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" name="email" class="form-control" placeholder="user@umkmgo.com" required autofocus>
-            </div>
-            <div class="mb-3">
+                </div>
+                <div class="mb-3">
                 <label class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" placeholder="***************" required>
-            </div>
+                </div>
             <button type="submit" class="btn btn-dark w-100 mb-3">Register Here</button>
         </form>
         <div class="d-flex align-items-center my-3">
             <hr class="flex-grow-1">
             <span class="mx-2 text-muted">Or</span>
             <hr class="flex-grow-1">
-        </div>
+                </div>
         <div class="d-grid gap-2 mb-3">
             <a href="#" class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-2">
                 <i class="fab fa-google"></i> Sign up with Google
@@ -42,7 +42,7 @@
             <a href="#" class="btn btn-outline-secondary d-flex align-items-center justify-content-center gap-2">
                 <i class="fab fa-apple"></i> Sign up with Apple
             </a>
-        </div>
+                </div>
         <div class="text-center mt-3">
             Already have an account? <a href="{{ route('login') }}" class="fw-semibold text-decoration-none text-primary">LOGIN HERE</a>
         </div>

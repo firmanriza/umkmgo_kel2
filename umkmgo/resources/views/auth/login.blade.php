@@ -15,13 +15,13 @@
     <div class="bg-white d-flex flex-column justify-content-center p-5" style="width: 100vw; max-width: 50vw;">
         <div class="mb-2 text-secondary">WELCOME BACK</div>
         <h3 class="fw-semibold mb-4">Log In to your Account</h3>
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-            <div class="mb-3">
+            <form method="POST" action="{{ route('login') }}">
+                @csrf
+                <div class="mb-3">
                 <label class="form-label">Email</label>
                 <input type="email" name="email" class="form-control" placeholder="user@umkmgo.com" required autofocus>
-            </div>
-            <div class="mb-3">
+                </div>
+                <div class="mb-3">
                 <label class="form-label">Password</label>
                 <input type="password" name="password" class="form-control" placeholder="***************" required>
             </div>
@@ -33,7 +33,7 @@
                 <a href="{{ route('password.request') }}" class="text-decoration-none text-primary">Forgot Password?</a>
             </div>
             <button type="submit" class="btn btn-dark w-100 mb-3">CONTINUE</button>
-        </form>
+            </form>
         <div class="d-flex align-items-center my-3">
             <hr class="flex-grow-1">
             <span class="mx-2 text-muted">Or</span>
