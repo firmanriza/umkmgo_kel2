@@ -45,47 +45,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/quiz/{id}/attempt', [QuizController::class, 'attempt'])->name('quiz.attempt');
     Route::post('/kuis/hasil', [QuizController::class, 'result'])->name('quiz.result');
 
-    // Final Quiz Routes with Summary and Answer Saving
-    Route::prefix('quiz/final')->group(function () {
-        Route::get('/', [QuizController::class, 'finalQuiz'])->name('quiz.final');
-        Route::get('/{id}', [QuizController::class, 'finalIntro'])->name('quiz.final_intro');
-        Route::get('/{id}/attempt', [QuizController::class, 'finalAttempt'])->name('quiz.final_attempt');
-        Route::get('/{id}/summary', [QuizController::class, 'finalSummary'])->name('quiz.final_summary');
-        Route::post('/{id}/save-answer', [QuizController::class, 'saveAnswer'])->name('quiz.save_answer');
-        Route::post('/{id}/submit', [QuizController::class, 'finalSubmit'])->name('quiz.final_submit');
-        
-    });
-    // Classes routes
-    // Route::prefix('classes')->group(function () {
-    //     Route::get('/', [\App\Http\Controllers\ClassController::class, 'index'])->name('classes.index');
-    //     Route::get('/list', [\App\Http\Controllers\ClassController::class, 'listClasses'])->name('classes.list');
-    //     Route::get('/{id}', [\App\Http\Controllers\ClassController::class, 'show'])->name('classes.show');
-    //     Route::get('/{kategori_umkm_id}/final-quiz', [\App\Http\Controllers\ClassController::class, 'finalQuiz'])->name('classes.final_quiz');
-    //     Route::get('/certificate/{id}', [\App\Http\Controllers\ClassController::class, 'certificate'])->name('classes.certificate');
+    
+    Route::get('/quiz/final', [QuizController::class, 'finalQuiz'])->name('quiz.final');
+    Route::post('/quiz/final/{id}/submit', [QuizController::class, 'finalSubmit'])->name('quiz.final_submit');
+    Route::get('/quiz/final/{id}', [QuizController::class, 'finalShow'])->name('quiz.final_show');
+    Route::post('/quiz/final/{id}/result', [QuizController::class, 'finalResult'])->name('quiz.final_result');
+    Route::get('quiz/final/{id}/attempt', [QuizController::class, 'finalAttempt'])->name('quiz.final_attempt');
 
-    //     // Admin-only CRUD routes for classes
-    //     Route::middleware('admin')->group(function () {
-    //         Route::get('/create', [\App\Http\Controllers\ClassController::class, 'create'])->name('classes.create');
-    //         Route::post('/', [\App\Http\Controllers\ClassController::class, 'store'])->name('classes.store');
-    //         Route::get('/{id}/edit', [\App\Http\Controllers\ClassController::class, 'edit'])->name('classes.edit');
-    //         Route::put('/{id}', [\App\Http\Controllers\ClassController::class, 'update'])->name('classes.update');
-    //         Route::delete('/{id}', [\App\Http\Controllers\ClassController::class, 'destroy'])->name('classes.destroy');
-    //     });
-    // });
+
     
     // Route resource untuk semua authenticated user (kecuali destroy)
     Route::resource('classes', \App\Http\Controllers\ClassController::class)->except(['destroy']);
-
-    // Route khusus untuk delete class oleh admin
-    // Route::delete('/classes/{class}', [\App\Http\Controllers\ClassController::class, 'destroy'])
-    //     ->middleware('admin')
-    //     ->name('classes.destroy');
-
     Route::delete('/classes/{class}', [\App\Http\Controllers\ClassController::class, 'destroy'])->name('classes.destroy');
 
     // Route tambahan khusus class (jika tidak termasuk dalam resource)
     Route::get('/list', [\App\Http\Controllers\ClassController::class, 'listClasses'])->name('classes.list');
-    Route::get('/classes/{kategori_umkm_id}/final-quiz', [\App\Http\Controllers\ClassController::class, 'finalQuiz'])->name('classes.final_quiz');
+    Route::get('/quiz/final/{id}', [QuizController::class, 'finalIntro'])->name('quiz.final_intro');
     Route::get('/classes/certificate/{id}', [\App\Http\Controllers\ClassController::class, 'certificate'])->name('classes.certificate');
     
 
@@ -98,7 +73,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/articles/{article}', [ArticleController::class, 'destroy'])->middleware('admin')->name('articles.destroy');
 
     // Admin user management and other admin features
-
     Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
         Route::post('/users/{user}/update-role', [AdminController::class, 'updateRole'])->name('admin.users.updateRole');

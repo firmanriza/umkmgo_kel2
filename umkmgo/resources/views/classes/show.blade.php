@@ -54,7 +54,7 @@
 
            
             <div id="quizBtnWrapper" class="d-none">
-                <a href="{{ route('classes.final_quiz', $class->kategori_umkm_id) }}" id="quizBtn" class="btn btn-success text-white w-100 mt-3">
+                <a href="{{ route('quiz.final_intro', $class->kategori_umkm_id) }}" id="quizBtn" class="btn btn-success text-white w-100 mt-3">
                     🚀 Ikuti Kuis Akhir
                 </a>
             </div>

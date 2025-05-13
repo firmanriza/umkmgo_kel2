@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Umkm extends Model
 {
     use HasFactory;
-
     protected $table = 'umkms';
-
     protected $fillable = [
         'user_id',
         'kategori_umkm_id',
