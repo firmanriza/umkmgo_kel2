@@ -158,32 +158,53 @@
 
 @stack('scripts')
 </head>
-<body>
+<body
+    @php
+        $route = request()->route() ? request()->route()->getName() : '';
+        $bg = '/images/background baru.jpg';
+        if ($route === 'login') {
+            $bg = '/images/login.jpg';
+        } elseif ($route === 'register') {
+            $bg = '/images/Register.jpg';
+        }
+    @endphp
+    style="background-image: url('{{ $bg }}'); background-size: cover; background-repeat: no-repeat; background-position: center center; min-height: 100vh;"
+>
 
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-    <a class="navbar-brand d-flex align-items-center" href="{{ url('/home') }}">
-    <img src="{{ asset('images/logoumkm.png') }}" alt="UMKMGo Logo">
-    </a>
-
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ms-auto">
+<nav class="navbar navbar-expand-lg sticky-top" style="background: #0070e0; z-index: 1050;">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand d-flex align-items-center me-3" href="{{ url('/home') }}">
+            <img src="{{ asset('images/logoumkm.png') }}" alt="UMKMGo Logo" style="height:36px; width:auto;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0" style="font-size:1.1rem;">
+                <li class="nav-item">
+                    <a class="nav-link" style="color:#fff !important;" href="{{ route('home') }}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color:#fff !important;" href="{{ route('classes.index') }}">Academy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" style="color:#fff !important;" href="{{ route('forum.index') }}">Forum</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto align-items-center" style="font-size:1.1rem;">
                 @guest
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" style="color:#fff !important;" href="{{ route('login') }}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" style="color:#fff !important;" href="{{ route('register') }}">Register</a></li>
                 @else
-
-                    <!-- <a class="nav-link {{ request()->routeIs('articles.*') ? 'active' : '' }}" href="{{ route('articles.index') }}">Artikel</a>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('forum.index') }}">Forum</a></li> -->
-                    
-                    <li class="nav-item ms-auto d-flex align-items-center">
-                    <span class="ms-2 text-black">Halo, {{ auth()->user()->name }}</span></li>
+                    <li class="nav-item d-flex align-items-center">
+                        <span class="ms-2" style="color:#fff !important;">Halo, {{ auth()->user()->name }}</span>
+                    </li>
                     @auth
-                    @if(auth()->user()->role === 'user')
-                    <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit') }}">Profile UMKM</a></li>
-                    @endif
+                        @if(auth()->user()->role === 'user')
+                            <li class="nav-item"><a class="nav-link" style="color:#fff !important;" href="{{ route('profile.edit') }}">Profile UMKM</a></li>
+                        @endif
                     @endauth
-                    <li class="nav-item"><a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                    <li class="nav-item"><a class="nav-link" style="color:#fff !important;" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
                 @endguest
             </ul>
@@ -195,5 +216,6 @@
     @yield('content')
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+@stack('custom-style')
 </body>
 </html>

@@ -91,40 +91,31 @@ public function finalAttempt($id)
 
 public function finalSubmit(Request $request, $id)
 {
-    $quiz = Quiz::with('soals')->where('kategori_id', $id)->where('nama_quiz', 'like', 'Kuis Akhir UMKM%')->firstOrFail();
+    $quiz = Quiz::with('soals')->where('kategori_id', $id)
+        ->where('nama_quiz', 'like', 'Kuis Akhir UMKM%')
+        ->firstOrFail();
+
     $jawaban = $request->input('jawaban', []);
 
     $score = 0;
     foreach ($jawaban as $soalId => $jawab) {
-        $soal = $quiz->soals->find($soalId);
-        if ($soal && $soal->jawaban_benar === $jawab) {
+        $soal = Soal::find($soalId); // ✅ Ambil soal dari DB
+        if ($soal && $soal->quiz_id == $quiz->id && $soal->jawaban_benar === $jawab) {
             $score++;
         }
     }
 
+    $total = $quiz->soals->count(); // ✅ Ambil semua soal
+    $nilai = $total > 0 ? round(($score / $total) * 100, 2) : 0;
+
     return view('quiz.final_result', [
         'score' => $score,
-        'total' => count($jawaban)
+        'total' => $total,
+        'nilai' => $nilai
     ]);
 }
 
-    public function finalResult(Request $request, $id)
-    {
-        $jawaban = $request->input('jawaban', []);
-        $score = 0;
 
-        foreach ($jawaban as $id => $jawab) {
-            $soal = Soal::find($id);
-            if ($soal && $soal->jawaban_benar === $jawab) {
-                $score++;
-            }
-        }
-
-        return view('quiz.final_result', [
-            'score' => $score,
-            'total' => count($jawaban)
-        ]);
-    }
 
     // =========================
     // QUIZ AWAL SECTION
