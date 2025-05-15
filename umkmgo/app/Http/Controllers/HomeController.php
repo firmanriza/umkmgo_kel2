@@ -23,6 +23,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = auth()->user();
+        $certificates = $user->certificates()->with('class.kategori')->latest('issued_at')->get();
+        $forums = $user->forums()->latest()->get();
+        return view('home', compact('certificates', 'forums'));
     }
 }

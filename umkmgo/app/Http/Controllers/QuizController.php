@@ -11,7 +11,7 @@ use App\Models\ClassModel;
 class QuizController extends Controller
 {
     // Fungsi khusus kuis awal (bukan final)
-    private function calculateResult($quiz, $jawaban)
+        private function calculateResult($quiz, $jawaban)
     {
         $bidangScores = [
             'Marketing' => ['benar' => 0, 'total' => 0],
@@ -54,7 +54,9 @@ class QuizController extends Controller
             if (in_array($level, ['Beginner', 'Intermediate'])) {
                 $matchedClasses = ClassModel::where('field', $bidang)
                     ->where('level', strtolower($level))
+                    ->where('kategori_umkm_id', $quiz->kategori_id) // ✅ filter kategori
                     ->get();
+
                 $recommendedClasses = $recommendedClasses->merge($matchedClasses);
             }
         }
@@ -91,40 +93,46 @@ public function finalAttempt($id)
 
 public function finalSubmit(Request $request, $id)
 {
-    $quiz = Quiz::with('soals')->where('kategori_id', $id)->where('nama_quiz', 'like', 'Kuis Akhir UMKM%')->firstOrFail();
+    $quiz = Quiz::with('soals')->where('kategori_id', $id)
+        ->where('nama_quiz', 'like', 'Kuis Akhir UMKM%')
+        ->firstOrFail();
+
     $jawaban = $request->input('jawaban', []);
 
     $score = 0;
     foreach ($jawaban as $soalId => $jawab) {
-        $soal = $quiz->soals->find($soalId);
-        if ($soal && $soal->jawaban_benar === $jawab) {
+        $soal = Soal::find($soalId); // ✅ Ambil soal dari DB
+        if ($soal && $soal->quiz_id == $quiz->id && $soal->jawaban_benar === $jawab) {
             $score++;
+        }
+    }
+
+    $total = $quiz->soals->count(); // ✅ Ambil semua soal
+    $nilai = $total > 0 ? round(($score / $total) * 100, 2) : 0;
+
+    // Tambahkan logic pembuatan sertifikat jika lulus
+    if ($nilai >= 70) { // misal kelulusan >= 70
+        $user = auth()->user();
+        $class = \App\Models\ClassModel::where('kategori_umkm_id', $id)->first(); // sesuaikan logika pengambilan kelas
+        if ($class && !\App\Models\Certificate::where('user_id', $user->id)->where('class_id', $class->id)->exists()) {
+            \App\Models\Certificate::create([
+                'user_id' => $user->id,
+                'class_id' => $class->id,
+                'quiz_id' => $quiz->id,
+                'issued_at' => now(),
+                // 'certificate_path' => null, // jika ada file PDF, isi path-nya
+            ]);
         }
     }
 
     return view('quiz.final_result', [
         'score' => $score,
-        'total' => count($jawaban)
+        'total' => $total,
+        'nilai' => $nilai
     ]);
 }
 
-    public function finalResult(Request $request, $id)
-    {
-        $jawaban = $request->input('jawaban', []);
-        $score = 0;
 
-        foreach ($jawaban as $id => $jawab) {
-            $soal = Soal::find($id);
-            if ($soal && $soal->jawaban_benar === $jawab) {
-                $score++;
-            }
-        }
-
-        return view('quiz.final_result', [
-            'score' => $score,
-            'total' => count($jawaban)
-        ]);
-    }
 
     // =========================
     // QUIZ AWAL SECTION

@@ -39,8 +39,8 @@
             </div>
 
             <div class="d-flex justify-content-between mt-4">
-                <button type="button" class="btn btn-secondary" id="prevBtn">Sebelumnya</button>
                 <button type="button" class="btn btn-success" id="nextBtn">Selanjutnya</button>
+                <button type="button" class="btn btn-secondary" id="prevBtn">Sebelumnya</button>
                 <button type="submit" class="btn btn-primary d-none" id="submitBtn">Kirim Jawaban</button>
             </div>
         </form>

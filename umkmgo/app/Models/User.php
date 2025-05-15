@@ -55,4 +55,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Umkm::class);
     }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+    public function forums()
+    {
+        return $this->hasMany(\App\Models\Forum::class);
+    }
 }
