@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class ClassController extends Controller
 {
     public function index()
+<<<<<<< Updated upstream
     {
         $kategoris = KategoriUMKM::all();
         $fields = ClassModel::getAvailableFields();
@@ -17,6 +18,18 @@ class ClassController extends Controller
         $classes = ClassModel::latest()->get();
         return view('classes.index', compact('kategoris', 'fields', 'levels'));
     }
+=======
+{
+    $classes = ClassModel::latest()->get();
+    $kategoris = \App\Models\KategoriUmkm::all();
+    $fields = ClassModel::getAvailableFields();
+    $levels = ['expert', 'intermediate', 'beginner'];
+    $types = ['daring', 'luring'];
+
+    return view('classes.index', compact('classes', 'kategoris', 'fields', 'levels', 'types'));
+}
+
+>>>>>>> Stashed changes
 
     public function create()
     {
@@ -43,6 +56,7 @@ class ClassController extends Controller
             'description' => 'nullable|string',
             'video_url' => 'nullable|url',
             'schedule_info' => 'nullable|string',
+<<<<<<< Updated upstream
             'material_pdf' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
@@ -54,6 +68,11 @@ class ClassController extends Controller
         }
 
         ClassModel::create($data);
+=======
+        ]);
+
+        ClassModel::create($request->all());
+>>>>>>> Stashed changes
 
         return redirect()->route('classes.index')->with('success', 'Kelas berhasil ditambahkan!');
     }
@@ -61,7 +80,10 @@ class ClassController extends Controller
     public function show($id)
     {
         $class = ClassModel::with('kategori')->findOrFail($id);
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         return view('classes.show', compact('class'));
     }
 
@@ -92,6 +114,7 @@ class ClassController extends Controller
             'description' => 'nullable|string',
             'video_url' => 'nullable|url',
             'schedule_info' => 'nullable|string',
+<<<<<<< Updated upstream
             'material_pdf' => 'nullable|file|mimes:pdf|max:2048',
         ]);
 
@@ -103,6 +126,11 @@ class ClassController extends Controller
         }
 
         $class->update($data);
+=======
+        ]);
+
+        $class->update($request->all());
+>>>>>>> Stashed changes
 
         return redirect()->route('classes.index')->with('success', 'Kelas berhasil diperbarui!');
     }
@@ -116,7 +144,11 @@ class ClassController extends Controller
         return redirect()->route('classes.index')->with('success', 'Kelas berhasil dihapus!');
     }
 
+<<<<<<< Updated upstream
     
+=======
+    // Optional: jika ingin tetap menampilkan filter dan sertifikat
+>>>>>>> Stashed changes
     public function listClasses(Request $request)
     {
         $query = ClassModel::query();
@@ -147,4 +179,8 @@ class ClassController extends Controller
     {
         return view('classes.certificate', compact('id'));
     }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

@@ -9,7 +9,11 @@ class Quiz extends Model
     // Relasi ke model kategori (kategori_umkm)    use HasFactory;
 
     protected $fillable = [
+<<<<<<< Updated upstream
         'nama_quiz',
+=======
+        'judul',
+>>>>>>> Stashed changes
         'kategori_id',
     ];
 

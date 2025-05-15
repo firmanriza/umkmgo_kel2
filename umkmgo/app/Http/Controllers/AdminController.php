@@ -4,10 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\ClassModel;
+use App\Models\Certificate;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+<<<<<<< Updated upstream
+=======
+    public function __construct()
+    {
+        $this->middleware(['auth', 'superadmin']);
+    }
+
+    // Show list of users for admin to manage roles
+>>>>>>> Stashed changes
     public function index()
     {
         $users = User::all();
@@ -25,4 +36,6 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', 'Role pengguna berhasil diperbarui.');
     }
+
+   
 }
