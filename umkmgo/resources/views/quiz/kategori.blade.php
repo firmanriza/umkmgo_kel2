@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+
+<!-- Font Awesome CDN supaya ikon muncul -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
 @push('scripts')
     <script>
         tailwind.config = {
@@ -12,55 +16,37 @@
     <script src="https://cdn.tailwindcss.com"></script>
 @endpush
 
-<div class="container mx-auto px-4">
-    <h2 class="text-2xl text-white font-bold text-center mb-10 mt-5"style="font-family: 'Plus Jakarta Sans', sans-serif;"><b>
-        Pilih Kategori
-      
-            UMKM
-    </b> </h2>
+<div class="container mx-auto px-4 pt-0 pb-12">
+    <h2 class="text-2xl text-white font-bold text-center mb-3" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+        Pilih Kategori UMKM
+    </h2>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
         @foreach($kategoris as $kategori)
             <a href="{{ route('quiz.index', ['id' => $kategori->id]) }}"
-               class="block text-center bg-[#FF6B00] hover:bg-orange-600 text-white shadow-md hover:shadow-lg rounded-xl p-4 transition duration-300">
-                <div class="mb-2">
+               class="block text-center bg-orange-600 hover:bg-orange-700 text-white shadow-md hover:shadow-xl rounded-xl px-8 py-3 transition-all duration-300 ease-in-out w-full max-w-[280px] mx-auto flex flex-col justify-center items-center gap-3">
+                <div>
                     @switch($kategori->nama_kategori)
                         @case('Kuliner')
-                            <svg class="w-10 h-10 mx-auto text-white" fill="none" stroke="currentColor" stroke-width="2"
-                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
-                            </svg>
+                            <i class="fas fa-utensils text-white text-3xl drop-shadow-md"></i>
                             @break
                         @case('Jasa')
-                            <svg class="w-10 h-10 mx-auto text-white" fill="none" stroke="currentColor" stroke-width="2"
-                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                            </svg>
+                            <i class="fas fa-handshake text-white text-3xl drop-shadow-md"></i>
                             @break
                         @case('Kerajinan')
-                            <svg class="w-10 h-10 mx-auto text-white" fill="none" stroke="currentColor" stroke-width="2"
-                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2s-2-.9-2-2v-2c0-1.1.9-2 2-2z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16"/>
-                            </svg>
+                            <i class="fas fa-tools text-white text-3xl drop-shadow-md"></i>
                             @break
                         @case('Fashion')
-                            <svg class="w-10 h-10 mx-auto text-white" fill="none" stroke="currentColor" stroke-width="2"
-                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 3h12l-1 6H7L6 3z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13h14v8H5z"/>
-                            </svg>
+                            <i class="fas fa-tshirt text-white text-3xl drop-shadow-md"></i>
                             @break
                         @default
-                            <svg class="w-10 h-10 mx-auto text-white" fill="none" stroke="currentColor" stroke-width="2"
-                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16v16H4z"/>
-                            </svg>
+                            <i class="fas fa-box text-white text-3xl drop-shadow-md"></i>
                     @endswitch
                 </div>
-                <p class="font-semibold">{{ $kategori->nama_kategori }}</p>
+                <p class="font-semibold text-lg tracking-wide">{{ $kategori->nama_kategori }}</p>
             </a>
         @endforeach
     </div>
 </div>
+
 @endsection
