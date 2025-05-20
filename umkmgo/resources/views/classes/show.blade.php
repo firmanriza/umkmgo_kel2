@@ -1,23 +1,103 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1>Detail Kelas</h1>
+<div class="container py-4">
+<h2 class="text-white mb-4"><b>{{ $class->title }}</b></h2>
 
-    <h3>{{ ucfirst($class->kategori->nama) }} - {{ ucfirst($class->field) }} - {{ ucfirst($class->level) }} ({{ ucfirst($class->type) }})</h3>
-
-    @if($class->type === 'daring')
-        <h4>Materi Video</h4>
-        <div class="ratio ratio-16x9">
-            <iframe src="{{ $class->video_url }}" title="YouTube video" allowfullscreen></iframe>
+    <div class="row">
+        
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3 mb-4">
+                <h6 class="mb-3">📘 Info Kelas</h6>
+                <p><strong>Kategori:</strong><br> {{ $class->kategori->nama_kategori ?? '-' }}</p>
+                <p><strong>Bidang:</strong><br> {{ ucfirst($class->field) }}</p>
+                <p><strong>Tingkat:</strong><br> {{ ucfirst($class->level) }}</p>
+                <p><strong>Jenis:</strong><br> {{ ucfirst($class->type) }}</p>
+                @if ($class->type === 'luring')
+                    <p><strong>Jadwal Luring:</strong><br>{{ $class->schedule_info }}</p>
+                @endif
+            </div>
         </div>
-    @elseif($class->type === 'luring')
-        <h4>Jadwal Pelatihan</h4>
-        <p>{!! nl2br(e($class->schedule_info)) !!}</p>
-    @endif
 
-    <a href="{{ route('classes.final_quiz', $class->kategori_umkm_id) }}" class="btn btn-primary mt-3">Ikuti Kuis Akhir</a>
-    <a href="{{ route('classes.certificate', $class->id) }}" class="btn btn-success mt-3">Lihat Sertifikat</a>
-    <a href="{{ route('classes.list') }}" class="btn btn-secondary mt-3">Kembali ke Daftar Kelas</a>
+        
+        <div class="col-md-8">
+            <div class="card shadow-sm p-4 mb-4">
+                <h5 class="mb-3">📝 Deskripsi Kelas</h5>
+                <p>{{ $class->description }}</p>
+            </div>
+
+            @if ($class->type === 'daring')
+                <div class="card shadow-sm p-3 mb-3">
+                    <h6 class="mb-2">🎥 Video Pembelajaran</h6>
+                    <a href="{{ $class->video_url }}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">Tonton Video</a>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input checklist" type="checkbox" value="" id="videoWatched">
+                        <label class="form-check-label" for="videoWatched">
+                            Saya sudah menonton video
+                        </label>
+                    </div>
+                </div>
+            @endif
+
+            @if($class->material_pdf)
+                <div class="card shadow-sm p-3 mb-3">
+                    <h6 class="mb-2">📄 Materi PDF</h6>
+                    <a href="{{ asset('storage/' . $class->material_pdf) }}" target="_blank" class="btn btn-sm btn-outline-success mb-2">Lihat / Download Materi</a>
+                    <div class="form-check mt-2">
+                        <input class="form-check-input checklist" type="checkbox" value="" id="materialRead">
+                        <label class="form-check-label" for="materialRead">
+                            Saya sudah membaca materi
+                        </label>
+                    </div>
+                </div>
+            @endif
+
+           
+            <div id="quizBtnWrapper" class="d-none">
+                <a href="{{ route('quiz.final_intro', $class->kategori_umkm_id) }}" id="quizBtn" class="btn btn-success text-white w-100 mt-3">
+                    🚀 Ikuti Kuis Akhir
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const videoCheckbox = document.getElementById('videoWatched');
+        const materialCheckbox = document.getElementById('materialRead');
+        const quizBtnWrapper = document.getElementById('quizBtnWrapper');
+
+        if (videoCheckbox) videoCheckbox.checked = localStorage.getItem('videoWatched') === 'true';
+        if (materialCheckbox) materialCheckbox.checked = localStorage.getItem('materialRead') === 'true';
+
+        function toggleQuizButton() {
+            const videoReady = videoCheckbox ? videoCheckbox.checked : true;
+            const materialReady = materialCheckbox ? materialCheckbox.checked : true;
+
+            if (videoReady && materialReady) {
+                quizBtnWrapper.classList.remove('d-none');
+            } else {
+                quizBtnWrapper.classList.add('d-none');
+            }
+        }
+
+        toggleQuizButton();
+
+        if (videoCheckbox) {
+            videoCheckbox.addEventListener('change', () => {
+                localStorage.setItem('videoWatched', videoCheckbox.checked);
+                toggleQuizButton();
+            });
+        }
+
+        if (materialCheckbox) {
+            materialCheckbox.addEventListener('change', () => {
+                localStorage.setItem('materialRead', materialCheckbox.checked);
+                toggleQuizButton();
+            });
+        }
+    });
+</script>
 @endsection

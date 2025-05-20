@@ -17,10 +17,7 @@ class ClassModel extends Model
         'description',
         'video_url',
         'schedule_info',
-<<<<<<< Updated upstream
         'material_pdf',
-=======
->>>>>>> Stashed changes
     ];
 
     public function kategori()

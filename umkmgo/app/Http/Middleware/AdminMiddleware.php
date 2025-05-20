@@ -13,7 +13,6 @@ class AdminMiddleware
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-<<<<<<< Updated upstream
      * @param  mixed ...$roles
      * @return mixed
      */
@@ -34,19 +33,3 @@ class AdminMiddleware
     abort(403); // Forbidden jika bukan admin
 }
 }
-=======
-     * @return mixed
-     */
-    public function handle(Request $request, Closure $next)
-    {
-        // Mengecek apakah user sudah terautentikasi dan memiliki role 'admin'
-        if (Auth::check() && Auth::user()->role === 'admin') {
-            return $next($request);
-        }
-
-        // Jika bukan admin, batalkan dengan 403 Forbidden
-        abort(403, 'Unauthorized access.');
-    }
-}
-
->>>>>>> Stashed changes
