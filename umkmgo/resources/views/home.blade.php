@@ -129,40 +129,58 @@
 
 @elseif(auth()->user()->role === 'mentor')
 <!-- MENTOR -->
-<div class="d-flex flex-column align-items-center vh-100 text-center">
-<h1 class="text-white mb-4 mt-5" style="font-family: 'Plus Jakarta Sans', sans-serif;">
-    <b>Dashboard</b>     
-    <span class="fw-bold px-2 py-1" style="background-color: #FF6B00; border-radius: 20px;">
-        Mentor
-    </span>
-</h1>
-<div class="mentor-dashboard container px-4 px-md-5">
-    <div class="mentor-cards d-flex gap-4 flex-wrap">
-        <div class="card p-3 d-flex flex-column justify-content-between" style="flex:1; background-color:#fd7e14; color:white; border-radius:10px; min-height: 250px;">
-            <div>
-                <h3>Manajemen Forum</h3>
+<div class="container mt-5 px-4 px-md-5">
+    <div class="blur-wrapper mb-4">
+        <div class="card shadow-lg rounded-4 border-0 bg-white p-4 w-100">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <h1 class="fw-bold mb-3 mb-md-0" style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 2rem;">
+                    Dashboard
+                    <span class="admin-badge ms-3">Mentor</span>
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="card d-flex flex-column p-4 hover-scale text-white h-100" style="background-color:#fd7e14; border-radius:10px;">
+                <h4 class="d-flex justify-content-between align-items-center">
+                    Manajemen Forum
+                    <i class="bi bi-people-fill fs-4"></i>
+                </h4>
                 <p>Kelola forum pada komunitas.</p>
+                <div class="mt-auto">
+                    <a href="{{ route('forum.index') }}" class="btn btn-light btn-sm w-100">Kelola Forum</a>
+                </div>
             </div>
-            <a href="{{ route('forum.index') }}" class="btn btn-light mt-3">Kelola Forum</a>
         </div>
-        <div class="card p-3 d-flex flex-column justify-content-between" style="flex:1; background-color:#0d6efd; color:white; border-radius:10px; min-height: 250px;">
-            <div>
-                <h3>Manajemen Kelas</h3>
+        <div class="col-md-6 col-lg-4">
+            <div class="card d-flex flex-column p-4 hover-scale text-white h-100" style="background-color:#0d6efd; border-radius:10px;">
+                <h4 class="d-flex justify-content-between align-items-center">
+                    Manajemen Kelas
+                    <i class="bi bi-easel2-fill fs-4"></i>
+                </h4>
                 <p>CRUD kelas luring/daring dari kategori UMKM dan bidangnya.</p>
-            </div>
-            <div>
-                <a href="{{ route('classes.index') }}" class="btn btn-light">Kelola Kelas</a>
+                <div class="mt-auto">
+                    <a href="{{ route('classes.index') }}" class="btn btn-light btn-sm w-100">Kelola Kelas</a>
+                </div>
             </div>
         </div>
-        <div class="card p-3 d-flex flex-column justify-content-between" style="flex:1; background-color:#dc3545; color:white; border-radius:10px; min-height: 250px;">
-            <div>
-                <h3>Manajemen Sertifikat</h3>
+        <div class="col-md-6 col-lg-4">
+            <div class="card d-flex flex-column p-4 hover-scale text-white h-100" style="background-color:#dc3545; border-radius:10px;">
+                <h4 class="d-flex justify-content-between align-items-center">
+                    Manajemen Sertifikat
+                    <i class="bi bi-award-fill fs-4"></i>
+                </h4>
                 <p>Tambah sertifikat untuk pengguna yang menyelesaikan kelas dan quiz akhir.</p>
+                <div class="mt-auto">
+                    <a href="{{ route('admin.certificates.assign') }}" class="btn btn-light btn-sm w-100">Kelola Sertifikat</a>
+                </div>
             </div>
-            <a href="{{ route('admin.certificates.assign') }}" class="btn btn-light mt-3">Kelola Sertifikat</a>
         </div>
     </div>
 </div>
+
 
 @else
 <!-- USER -->
