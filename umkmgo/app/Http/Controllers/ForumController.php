@@ -8,9 +8,22 @@ use Illuminate\Support\Facades\Auth;
 
 class ForumController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        $forums = Forum::with('user')->latest()->get();
+        $search = $request->input('search');
+
+        $query = Forum::with('user')->latest();
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('content', 'like', '%' . $search . '%');
+            });
+        }
+
+        $forums = $query->get();
+
         return view('forum.index', compact('forums'));
     }
 

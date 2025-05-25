@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     
     
     <style>
@@ -19,6 +20,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+    background-attachment: fixed;
     min-height: 100vh;
 }
 
@@ -122,6 +124,27 @@
         color: #e96b0c;
     }
 
+    .navbar-nav .nav-link {
+    position: relative;
+    color: #fff !important;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: var(--accent);
+    transition: width 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 100%;
+}
+
 
     .custom-button-blue {
         background-color: #007bff;
@@ -163,9 +186,9 @@
         $route = request()->route() ? request()->route()->getName() : '';
         $bg = '/images/background baru.jpg';
         if ($route === 'login') {
-            $bg = '/images/login.jpg';
+            $bg = '/images/loginumkm.jpg';
         } elseif ($route === 'register') {
-            $bg = '/images/Register.jpg';
+            $bg = '/images/loginumkm.jpg';
         }
     @endphp
     style="background-image: url('{{ $bg }}'); background-size: cover; background-repeat: no-repeat; background-position: center center; min-height: 100vh;"
@@ -174,40 +197,56 @@
 <nav class="navbar navbar-expand-lg sticky-top" style="background: #0070e0; z-index: 1050;">
     <div class="container-fluid px-4">
         <a class="navbar-brand d-flex align-items-center me-3" href="{{ url('/home') }}">
-            <img src="{{ asset('images/logoumkm.png') }}" alt="UMKMGo Logo" style="height:36px; width:auto;">
+            <img src="{{ asset('images/logoumkm.png') }}" alt="UMKMGo Logo" style="height:56px; width:auto;">   
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="mainNavbar">
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0" style="font-size:1.1rem;">
-                <li class="nav-item">
-                    <a class="nav-link" style="color:#fff !important;" href="{{ route('home') }}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" style="color:#fff !important;" href="{{ route('classes.index') }}">Academy</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" style="color:#fff !important;" href="{{ route('forum.index') }}">Forum</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ms-auto align-items-center" style="font-size:1.1rem;">
-                @guest
+            @guest
+                <ul class="navbar-nav ms-auto align-items-center" style="font-size:1.1rem;">
                     <li class="nav-item"><a class="nav-link" style="color:#fff !important;" href="{{ route('login') }}">Login</a></li>
                     <li class="nav-item"><a class="nav-link" style="color:#fff !important;" href="{{ route('register') }}">Register</a></li>
-                @else
-                    <li class="nav-item d-flex align-items-center">
-                        <span class="ms-2" style="color:#fff !important;">Halo, {{ auth()->user()->name }}</span>
+                </ul>
+            @else
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0" style="font-size:1.1rem;">
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:#fff !important;" href="{{ route('home') }}">Home</a>
                     </li>
-                    @auth
-                        @if(auth()->user()->role === 'user')
-                            <li class="nav-item"><a class="nav-link" style="color:#fff !important;" href="{{ route('profile.edit') }}">Profile UMKM</a></li>
-                        @endif
-                    @endauth
-                    <li class="nav-item"><a class="nav-link" style="color:#fff !important;" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:#fff !important;" href="{{ route('classes.index') }}">Academy</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:#fff !important;" href="{{ route('forum.index') }}">Forum</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto align-items-center" style="font-size:1.1rem;">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:#fff !important;">
+                            <i class="bi bi-person-circle fs-4 me-2"></i>
+                            <span>Halo, {{ auth()->user()->name }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            @if(auth()->user()->role === 'user')
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                        <i class="bi bi-gear me-2"></i> Edit Profil
+                                    </a>
+                                </li>
+                            @endif
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
-                @endguest
-            </ul>
+                </ul>
+            @endguest
         </div>
     </div>
 </nav>

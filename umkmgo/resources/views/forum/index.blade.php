@@ -50,13 +50,13 @@
         background-color: #ea6512;
     }
 
-    .dropdown-toggle {
+    /* .dropdown-toggle {
         background-color: #F97316; 
         color: white; 
         border: none;
         padding: 8px 14px; 
         border-radius: 8px; 
-    }
+    } */
 
     .dropdown-toggle:hover {
         background-color: #ea6512; 
@@ -92,6 +92,11 @@
 </div>
 
 <div class="container">
+    <form method="GET" action="{{ route('forum.index') }}" class="mb-3 d-flex">
+        <input type="text" name="search" class="form-control me-2" placeholder="Cari topik forum..." value="{{ request('search') }}">
+        <button type="submit" class="btn custom-button">Cari</button>
+    </form>
+
     <div class="text-end mb-3">
         <a href="{{ route('forum.create') }}">
             <button class="custom-button">+ Tambah Diskusi</button>
