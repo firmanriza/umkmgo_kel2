@@ -26,7 +26,7 @@
                         <input class="form-check-input" type="checkbox" name="remember" id="remember">
                         <label class="form-check-label" for="remember">Remember me</label>
                     </div>
-                    <a href="#" class="text-decoration-none small">Forgot Password?</a>
+                    <!-- <a href="#" class="text-decoration-none small">Forgot Password?</a> -->
                 </div>
                 <button class="custom-button w-100 mb-3">CONTINUE</button>
             </form>

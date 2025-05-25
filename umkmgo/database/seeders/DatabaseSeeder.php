@@ -23,5 +23,8 @@ class DatabaseSeeder extends Seeder
     
         $this->call(QuizSeeder::class);
         $this->call(FinalQuizSeeder::class);
+        $this->call(ForumSeeder::class);
+        $this->call(ClassesTableSeeder::class);
+        $this->call(ArticlesTableSeeder::class);
     }
 }

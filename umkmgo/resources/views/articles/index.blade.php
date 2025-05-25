@@ -69,6 +69,12 @@
         <h2>Daftar Artikel UMKMGO</h2>
         <p class="group-subinfo">Berisi kumpulan artikel seputar UMKM</p>
     </div>
+    
+<div class="container">
+    <form method="GET" action="{{ route('articles.index') }}" class="mb-3 d-flex" >
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari topik artikel..." class="form-control me-2" />
+        <button type="submit" class="btn custom-button">Cari</button>
+    </form>
 
     @if(auth()->user()->role === 'admin')
     <div class="text-end mb-4">

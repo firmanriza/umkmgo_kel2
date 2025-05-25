@@ -58,9 +58,9 @@
         border-radius: 8px; 
     } */
 
-    .dropdown-toggle:hover {
+    /* .dropdown-toggle:hover {
         background-color: #ea6512; 
-    }
+    } */
 
     .dropdown-toggle::after {
         content: '';
@@ -121,7 +121,7 @@
         <small>Diposting oleh {{ $forum->user->name }} pada {{ $forum->created_at->format('d M Y H:i') }}</small>
 
       
-        @if (Auth::id() === $forum->user_id || Auth::user()->role === 'admin')
+        @if (Auth::id() === $forum->user_id || Auth::user()->role === 'admin' || Auth::user()->role === 'mentor')
         <div class="position-absolute top-0 end-0 mt-2 me-2">
             <div class="dropdown">
                 <button class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

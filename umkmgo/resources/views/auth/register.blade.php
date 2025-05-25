@@ -34,7 +34,7 @@
                     <label class="form-label">Role</label>
                     <select name="role" class="form-select" required>
                         <option value="user" selected>User</option>
-                        <option value="admin">Admin</option>
+                        <option value="mentor">Mentor</option>
                     </select>
                 </div>
                 <div class="mb-3">
