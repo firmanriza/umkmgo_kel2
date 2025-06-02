@@ -16,7 +16,7 @@
     }
 
     body {
-    background-image: url('/images/background baru.jpg'); 
+    background-image: url('/images/new background.png'); 
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -110,8 +110,6 @@
 </style>
 
 <style>
-
-
     .nav-tabs .nav-link.active {
         background-color: #fd7e14 !important; 
         color: white !important;
@@ -184,7 +182,7 @@
 <body
     @php
         $route = request()->route() ? request()->route()->getName() : '';
-        $bg = '/images/background baru.jpg';
+        $bg = '/images/new background.png';
         if ($route === 'login') {
             $bg = '/images/loginumkm.jpg';
         } elseif ($route === 'register') {
