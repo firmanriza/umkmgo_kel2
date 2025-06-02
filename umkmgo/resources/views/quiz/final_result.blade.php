@@ -45,6 +45,15 @@
         margin-top: 20px;
         display: inline-block;
     }
+
+    .btn-wrapper {
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    .btn-wrapper .btn {
+        margin: 0 10px;
+    }
 </style>
 
 <h2 class="mb-6 text-3xl font-extrabold text-white text-center drop-shadow-lg">Hasil Kuis Akhir</h2>
@@ -57,21 +66,21 @@
 </div>
 
 @if($nilai >= 75)
-    <div class="flex justify-center gap-4 mt-6">
-        <a href="{{ route('home') }}">
-            <button class="btn btn-secondary">Kembali ke Beranda</button>
-        </a>
-        <a href="{{ route('viewCertificate') }}">
-            <button class="btn btn-custom-blue">Lihat Sertifikat</button>
-        </a>
-    </div>
+<div class="btn-wrapper">
+    <a href="{{ route('home') }}">
+        <button class="btn btn-secondary">Kembali ke Beranda</button>
+    </a>
+    <a href="{{ route('viewCertificate') }}">
+        <button class="btn btn-custom-blue">Lihat Sertifikat</button>
+    </a>
+</div>
 @else
     <div class="text-center mt-6">
         <span class="alert-custom">
             ⚠️ Nilai Anda belum mencukupi untuk mendapatkan sertifikat. Minimal 75%.
         </span>
 
-        <div class="mt-4">
+        <div class="btn-wrapper">
             <a href="{{ route('home') }}">
                 <button class="btn btn-secondary">Kembali ke Beranda</button>
             </a>
