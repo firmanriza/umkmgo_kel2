@@ -50,17 +50,17 @@
         background-color: #ea6512;
     }
 
-    .dropdown-toggle {
+    /* .dropdown-toggle {
         background-color: #F97316; 
         color: white; 
         border: none;
         padding: 8px 14px; 
         border-radius: 8px; 
-    }
+    } */
 
-    .dropdown-toggle:hover {
+    /* .dropdown-toggle:hover {
         background-color: #ea6512; 
-    }
+    } */
 
     .dropdown-toggle::after {
         content: '';
@@ -92,6 +92,11 @@
 </div>
 
 <div class="container">
+    <form method="GET" action="{{ route('forum.index') }}" class="mb-3 d-flex">
+        <input type="text" name="search" class="form-control me-2" placeholder="Cari topik forum..." value="{{ request('search') }}">
+        <button type="submit" class="btn custom-button">Cari</button>
+    </form>
+
     <div class="text-end mb-3">
         <a href="{{ route('forum.create') }}">
             <button class="custom-button">+ Tambah Diskusi</button>
@@ -116,7 +121,7 @@
         <small>Diposting oleh {{ $forum->user->name }} pada {{ $forum->created_at->format('d M Y H:i') }}</small>
 
       
-        @if (Auth::id() === $forum->user_id || Auth::user()->role === 'admin')
+        @if (Auth::id() === $forum->user_id || Auth::user()->role === 'admin' || Auth::user()->role === 'mentor')
         <div class="position-absolute top-0 end-0 mt-2 me-2">
             <div class="dropdown">
                 <button class="btn btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

@@ -2,18 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Article;
 
 class ArticleController extends Controller
 {
-    public function index() {
-        $articles = Article::latest()->get();
-        return view('articles.index', compact('articles'));
+
+    public function index(Request $request)
+    {
+        $query = $request->input('search');
+
+        $articles = Article::query();
+
+        if ($query) {
+            $articles = $articles->where('title', 'like', '%' . $query . '%')
+                                 ->orWhere('content', 'like', '%' . $query . '%');
+        }
+
+        $articles = $articles->latest()->paginate(10)->withQueryString();
+
+        return view('articles.index', compact('articles', 'query'));
     }
 
-    public function create() {
+  public function create() {
         $this->authorize('create', Article::class);
         return view('articles.create');
     }

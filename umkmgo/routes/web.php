@@ -77,14 +77,16 @@ Route::middleware('auth')->group(function () {
     Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::get('/users', [AdminController::class, 'index'])->name('admin.users.index');
         Route::post('/users/{user}/update-role', [AdminController::class, 'updateRole'])->name('admin.users.updateRole');
+        Route::get('/users-certificates', [AdminController::class, 'usersWithCertificates'])->name('admin.users.certificates');
     });
         // Admin certificate assignment routes
         Route::get('/certificates/assign', [AdminController::class, 'assignCertificateForm'])->name('admin.certificates.assign');
-        Route::post('/certificates', [AdminController::class, 'storeCertificate'])->name('admin.certificates.store');
+    Route::post('/certificates', [AdminController::class, 'storeCertificate'])->name('admin.certificates.store');
     });
 
     Route::controller(CertificateController::class)->group(function(){
         Route::get('/certif','index');
         Route::get('/view-certificate','viewCertificate')->name('viewCertificate');
         Route::get('/download-certificate','downloadCertificate')->name('downloadCertificate');
+        Route::get('/my-certificates', 'userCertificates')->name('user.certificates');
     });

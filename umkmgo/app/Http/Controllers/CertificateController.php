@@ -72,4 +72,12 @@ class CertificateController extends Controller
     {   
         return $this->generateCertificate(true);
     }
+
+    // Menampilkan semua sertifikat milik user yang sedang login
+    public function userCertificates()
+    {
+        $user = Auth::user();
+        $certificates = $user->certificates()->with(['class.kategori'])->latest('issued_at')->get();
+        return view('certificate.user_certificates', compact('certificates'));
+    }
 }
