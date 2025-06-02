@@ -16,11 +16,7 @@
     }
 
     body {
-<<<<<<< Updated upstream
-    background-image: url('/images/bgnew.png'); 
-=======
     background-image: url('/images/background baru.jpg'); 
->>>>>>> Stashed changes
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -186,11 +182,7 @@
 <body
     @php
         $route = request()->route() ? request()->route()->getName() : '';
-<<<<<<< Updated upstream
-        $bg = '/images/bgnew.png';
-=======
         $bg = '/images/background baru.jpg';
->>>>>>> Stashed changes
         if ($route === 'login') {
             $bg = '/images/loginumkm.jpg';
         } elseif ($route === 'register') {
