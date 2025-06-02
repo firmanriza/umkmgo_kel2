@@ -16,7 +16,7 @@
     }
 
     body {
-    background-image: url('/images/new background.png'); 
+    background-image: url('/images/new-background.png'); 
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -182,7 +182,7 @@
 <body
     @php
         $route = request()->route() ? request()->route()->getName() : '';
-        $bg = '/images/new background.png';
+        $bg = '/images/new-background.png';
         if ($route === 'login') {
             $bg = '/images/loginumkm.jpg';
         } elseif ($route === 'register') {
